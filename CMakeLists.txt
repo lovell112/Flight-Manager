@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 4.0)
-project(AirplaneManager)
+project(FlightManager)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(AirplaneManager main.cpp
+add_executable(${PROJECT_NAME} main.cpp
         src/core/Airplane.cpp
         include/core/Airplane.h
         src/core/Flight.cpp
