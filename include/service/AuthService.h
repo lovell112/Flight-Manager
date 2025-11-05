@@ -1,0 +1,13 @@
+//
+// Created by HP on 05/11/2025.
+//
+
+#ifndef AIRPLANEMANAGER_AUTHSERVICE_H
+#define AIRPLANEMANAGER_AUTHSERVICE_H
+
+
+class AuthService {
+};
+
+
+#endif //AIRPLANEMANAGER_AUTHSERVICE_H

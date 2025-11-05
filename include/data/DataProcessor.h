@@ -1,0 +1,14 @@
+//
+// Created by HP on 05/11/2025.
+//
+
+#ifndef AIRPLANEMANAGER_DATAPROCESSOR_H
+#define AIRPLANEMANAGER_DATAPROCESSOR_H
+
+
+static class DataProcessor {
+
+};
+
+
+#endif //AIRPLANEMANAGER_DATAPROCESSOR_H

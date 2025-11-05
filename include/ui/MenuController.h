@@ -1,0 +1,13 @@
+//
+// Created by HP on 05/11/2025.
+//
+
+#ifndef AIRPLANEMANAGER_MENUCONTROLLER_H
+#define AIRPLANEMANAGER_MENUCONTROLLER_H
+
+
+class MenuController {
+};
+
+
+#endif //AIRPLANEMANAGER_MENUCONTROLLER_H

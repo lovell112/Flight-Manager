@@ -1,0 +1,13 @@
+//
+// Created by HP on 05/11/2025.
+//
+
+#ifndef AIRPLANEMANAGER_CUSTOMERSERVICE_H
+#define AIRPLANEMANAGER_CUSTOMERSERVICE_H
+
+
+class CustomerService {
+};
+
+
+#endif //AIRPLANEMANAGER_CUSTOMERSERVICE_H

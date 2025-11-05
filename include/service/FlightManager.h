@@ -1,0 +1,13 @@
+//
+// Created by HP on 05/11/2025.
+//
+
+#ifndef AIRPLANEMANAGER_FLIGHTMANAGER_H
+#define AIRPLANEMANAGER_FLIGHTMANAGER_H
+
+
+class FlightManager {
+};
+
+
+#endif //AIRPLANEMANAGER_FLIGHTMANAGER_H

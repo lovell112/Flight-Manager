@@ -1,0 +1,13 @@
+//
+// Created by HP on 05/11/2025.
+//
+
+#ifndef AIRPLANEMANAGER_CONSOLEUI_H
+#define AIRPLANEMANAGER_CONSOLEUI_H
+
+
+class ConsoleUI {
+};
+
+
+#endif //AIRPLANEMANAGER_CONSOLEUI_H

@@ -1,0 +1,13 @@
+//
+// Created by HP on 05/11/2025.
+//
+
+#ifndef AIRPLANEMANAGER_TICKETMANAGER_H
+#define AIRPLANEMANAGER_TICKETMANAGER_H
+
+
+class TicketManager {
+};
+
+
+#endif //AIRPLANEMANAGER_TICKETMANAGER_H
