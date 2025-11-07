@@ -1,12 +1,17 @@
 #include "../../include/core/Admin.h"
 
-bool Admin::login(const string &username, const string &password) const {
+Admin::Admin(const string& username, const string& password) : m_strUsername(username), m_strPassword(password) {}
+
+Admin::~Admin() {}
+
+bool Admin::tryLogin(const string &username, const string &password) const {
     if (username == m_strUsername && password == m_strPassword)
         return true;
     return false;
 }
 
-bool Admin::changePassword(const string &oldPassword, const string &newPassword) {
+// Neu thoa man cac dieu kien thi doi mat khau, return true; nguoc lai khong doi, return false
+bool Admin::tryChangePassword(const string &oldPassword, const string &newPassword) {
     if (oldPassword != m_strPassword || oldPassword == newPassword)
         return false;
     m_strPassword = newPassword;

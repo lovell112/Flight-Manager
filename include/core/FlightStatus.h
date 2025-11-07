@@ -7,6 +7,10 @@
 
 
 enum class FlightStatus {
+    Canceled = 0,
+    Available = 1,
+    SoldOut = 2,
+    Completed = 3
 };
 
 

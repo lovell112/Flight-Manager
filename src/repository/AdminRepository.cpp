@@ -1,1 +1,74 @@
 #include "../../include/repository/AdminRepository.h"
+
+AdminRepository::AdminRepository() {
+    loadAllAdmins();
+}
+
+AdminRepository::~AdminRepository() {
+
+    // Luu lai cac tai khoan admin truoc khi delete
+    saveAllAdmins();
+
+    // Delete tat ca admin tranh bi leak memory
+    for (auto& admin : m_admins) {
+        delete admin;
+    }
+
+    m_admins.clear();
+}
+
+void AdminRepository::loadAllAdmins() {
+
+    ifstream reader(PATH);
+
+    // Kiem tra co doc duoc file khong?
+    if (!reader.is_open()) {
+        cerr << "Khong doc duoc file\n";
+        return;
+    }
+
+    // Doc 1 dong, sau do tach du lieu tu dong doc duoc
+    string line;
+    while (getline(reader, line)) {
+        stringstream spliter(line);
+        string username, password;
+        getline(spliter, username, '|'); // tach username
+        getline(spliter, password, '|'); // Tach password
+        m_admins.push_back(new Admin(username, password)); // add admin vao repo
+    }
+    reader.close();
+}
+
+void AdminRepository::saveAllAdmins() const {
+    ofstream writer(PATH);
+
+    // Kiem tra co doc duoc file khong?
+    if (!writer.is_open()) {
+        cerr << "Khong viet duoc file";
+        return;
+    }
+
+    // Ghi du lieu admin ra file theo dinh dang: username|password
+    for (const auto& admin : m_admins) {
+        writer << admin->toString() << endl;
+    }
+    writer.close();
+}
+
+vector<Admin*>::iterator AdminRepository::getValidateAdmin(const string &username, const string &password) {
+    // Su dung iterator de duyet cac admin va kiem tra, neu ton tai, return 1 iterator cua admin do
+    for (auto admin = m_admins.begin(); admin != m_admins.end(); admin++) {
+        if ((*admin)->tryLogin(username, password))
+            return admin;
+    }
+
+    return m_admins.end();
+}
+
+vector<Admin *>::iterator AdminRepository::begin() {
+    return m_admins.begin();
+}
+
+vector<Admin *>::iterator AdminRepository::invalidAdmin() {
+    return m_admins.end();
+}

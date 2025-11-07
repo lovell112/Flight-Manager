@@ -8,8 +8,10 @@ class Admin {
     string m_strUsername;
     string m_strPassword;
 public:
-    bool login(const string&, const string&) const;
-    bool changePassword(const string&, const string&);
+    Admin(const string&, const string&);
+    ~Admin();
+    bool tryLogin(const string&, const string&) const;
+    bool tryChangePassword(const string&, const string&);
     string toString() const;
     void printAdminInfo() const;
 };
