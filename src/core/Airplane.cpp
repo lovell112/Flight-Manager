@@ -55,13 +55,10 @@ void Airplane::setSeatCount(int count) {
 
 // ====Logic====
 string Airplane::toString() const {
-    string info = "Airplane: " + m_strID;
+    string info = m_strID;
 
     for (bool seat : m_seatList)
         info += "|" + string(seat ? "1" : "0");
-
-    info += "\nTotal seats: " + to_string(m_iSeatCount);
-    info += "\nEmpty seats: " + to_string(m_iEmptySeatCount);
     return info;
 }
 
