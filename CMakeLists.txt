@@ -15,8 +15,6 @@ add_executable(${PROJECT_NAME} main.cpp
         src/core/Admin.cpp
         include/core/Admin.h
         include/core/FlightStatus.h
-        src/data/DataProcessor.cpp
-        include/data/DataProcessor.h
         src/service/FlightManager.cpp
         include/service/FlightManager.h
         src/service/TicketManager.cpp
