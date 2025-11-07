@@ -1,18 +1,29 @@
-//
-// Created by HP on 05/11/2025.
-//
+#ifndef CUSTOMER_H
+#define CUSTOMER_H
 
-#ifndef AIRPLANEMANAGER_CUSTOMER_H
-#define AIRPLANEMANAGER_CUSTOMER_H
 #include <string>
-
+using namespace std;
 
 class Customer {
-    std::string name;
-    std::string age;
+private:
+    int m_iNumber;
+    string m_strFullName;
+    string m_strID;
+
 public:
-    void Lo(std::string);
+    // Constructor mặc định (không có tham số)
+    Customer();
+
+    Customer(int, string, string);
+
+    const string getCustomerID() const;
+    const string getFullName() const;
+    const int getNumber() const;
+
+    const string toString() const;
+
+    // in 
+    void printCustomerInfo() const;
 };
 
-
-#endif //AIRPLANEMANAGER_CUSTOMER_H
+#endif
