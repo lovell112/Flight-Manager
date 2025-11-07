@@ -1,7 +1,3 @@
-//
-// Created by HP on 05/11/2025.
-//
-
 #include "../../include/core/Admin.h"
 
 bool Admin::login(const string &username, const string &password) const {
