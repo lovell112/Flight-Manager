@@ -1,0 +1,13 @@
+//
+// Created by HP on 05/11/2025.
+//
+
+#ifndef FLIGHTMANAGER_CUSTOMERREPOSITORY_H
+#define FLIGHTMANAGER_CUSTOMERREPOSITORY_H
+
+
+class CustomerRepository {
+};
+
+
+#endif //FLIGHTMANAGER_CUSTOMERREPOSITORY_H

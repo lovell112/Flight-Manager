@@ -1,0 +1,13 @@
+//
+// Created by HP on 05/11/2025.
+//
+
+#ifndef FLIGHTMANAGER_TICKETREPOSITORY_H
+#define FLIGHTMANAGER_TICKETREPOSITORY_H
+
+
+class TicketRepository {
+};
+
+
+#endif //FLIGHTMANAGER_TICKETREPOSITORY_H

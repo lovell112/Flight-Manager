@@ -1,0 +1,13 @@
+//
+// Created by HP on 05/11/2025.
+//
+
+#ifndef FLIGHTMANAGER_FLÌGHTREPOSITORY_H
+#define FLIGHTMANAGER_FLÌGHTREPOSITORY_H
+
+
+class FlightRepository {
+};
+
+
+#endif //FLIGHTMANAGER_FLÌGHTREPOSITORY_H

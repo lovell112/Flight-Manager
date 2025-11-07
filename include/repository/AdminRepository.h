@@ -1,0 +1,13 @@
+//
+// Created by HP on 05/11/2025.
+//
+
+#ifndef FLIGHTMANAGER_ADMINREPOSITORY_H
+#define FLIGHTMANAGER_ADMINREPOSITORY_H
+
+
+class AdminRepository {
+};
+
+
+#endif //FLIGHTMANAGER_ADMINREPOSITORY_H

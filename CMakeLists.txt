@@ -28,4 +28,14 @@ add_executable(${PROJECT_NAME} main.cpp
         src/ui/ConsoleUI.cpp
         include/ui/ConsoleUI.h
         src/ui/MenuController.cpp
-        include/ui/MenuController.h)
+        include/ui/MenuController.h
+        src/repository/AirplaneRepository.cpp
+        include/repository/AirplaneRepository.h
+        src/repository/FlightRepository.cpp
+        include/repository/FlightRepository.h
+        src/repository/CustomerRepository.cpp
+        include/repository/CustomerRepository.h
+        src/repository/AdminRepository.cpp
+        include/repository/AdminRepository.h
+        src/repository/TicketRepository.cpp
+        include/repository/TicketRepository.h)

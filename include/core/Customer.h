@@ -4,9 +4,14 @@
 
 #ifndef AIRPLANEMANAGER_CUSTOMER_H
 #define AIRPLANEMANAGER_CUSTOMER_H
+#include <string>
 
 
 class Customer {
+    std::string name;
+    std::string age;
+public:
+    void Lo(std::string);
 };
 
 
