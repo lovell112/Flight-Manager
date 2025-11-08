@@ -21,7 +21,7 @@ private:
     string m_strDestinationAirport;
     DateTime m_departureDate;
     FlightStatus m_status;
-    vector<Ticket> m_tickets;  
+    vector<string> m_tickets;  
 
 public:
 
