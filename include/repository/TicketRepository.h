@@ -13,7 +13,7 @@ using namespace std;
 
 class TicketRepository {
     vector<Ticket*> m_tickets;
-    const string PATH = "../data/ticket.txt";
+    const string PATH = "../data/tickets";
 public:
     TicketRepository();
     ~TicketRepository();
