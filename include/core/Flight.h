@@ -11,37 +11,48 @@
 #include "../../include/core/FlightStatus.h"
 #include "../../include/core/Ticket.h"
 #include "../../include/core/DateTime.h"
-#include "../../include/core/Ticket.h"
+
 using namespace std;
 
 class Flight {
+private:
     string m_strFlightID;
     string m_strAirplaneID;
     string m_strDestinationAirport;
     DateTime m_departureDate;
     FlightStatus m_status;
-    Ticket vector<string> m_tickets;
+    vector<Ticket> m_tickets;  
 
 public:
-    Flight(const string&, const string&,
-        const string&, const DateTime&,const& FlightStatus, Ticket const&);
-    ~Flight();
 
-	string getFlightID() const;
+    Flight() = default;
+    Flight(const string& flightID,
+        const string& airplaneID,
+        const string& destination,
+        const DateTime& departure,
+        const FlightStatus& status,
+        const vector<Ticket>& tickets = {});
+    ~Flight() = default;
+
+  
+    string getFlightID() const;
+    void setFlightID(const string&);
     string getAirplaneID() const;
+    void setAirplaneID(const string&);
     string getDestinationAirport() const;
+    void setDestinationAirport(const string&);
     DateTime getDepartureDate() const;
-	FlightStatus getStatus() const;
-    void setStatus(FlightStatus);
-	void getTickets(const string&) ;
-	void removeTicket(const string&);
-    vector<string>& getTickets(const string&);
+    void setDepartureDate(const DateTime&);
+    FlightStatus getStatus() const;
+    vector<Ticket>& getTickets(); 
+
+
+    void setStatus(FlightStatus newStatus);
+    void addTicket(const Ticket& ticket);
+    void removeTicket(const string& ticketID);
+
     string toString() const;
     void printFlightInfo() const;
 };
 
-#endif
-
-
-
-#endif //AIRPLANEMANAGER_FLIGHT_H
+#endif // FLIGHTMANAGER_FLIGHT_H
