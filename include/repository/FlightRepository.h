@@ -17,11 +17,11 @@ class FlightRepository {
 public:
     TicketRepository();
     ~TicketRepository();
-    void add(const Ticket& ticket);
-    void remove(const string& ticketID);
-    vector<Ticket*>::iterator findByID(const string& id);
-    vector<Ticket*> findByDate(const string& date);
-    vector<Ticket*> findByDestination(const string& destination);
+    void add(const Ticket&);
+    void remove(const string&);
+    vector<Ticket*>::iterator findByID(const string&);
+    vector<Ticket*> findByDate(const string&);
+    vector<Ticket*> findByDestination(const string&);
     vector<Ticket*>& getAll();
     void loadAllTickets();
     void saveAllTickets();
