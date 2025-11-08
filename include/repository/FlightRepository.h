@@ -4,12 +4,12 @@
 
 #ifndef FLIGHTMANAGER_FLIGHTREPOSITORY_H
 #define FLIGHTMANAGER_FLIGHTREPOSITORY_H
-
-#include "../core/Admin.h"
+#include "../../include/core/Flight.h"
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <iostream>
 using namespace std;
 
 class FlightRepository {
