@@ -89,7 +89,11 @@ void AirplaneRepository::saveAllAirplanes() const {
     }
 
     for (const auto& plane : m_airplanes) {
-        writer << plane->getID() << "|" << plane->getSeatCount() << endl;
+        writer << plane->getID();
+        for (bool seat : plane->getSeatList()) {
+            writer << "|" + string(seat ? "1" : "0");
+        }
+        writer << endl;
     }
 
     writer.close();
