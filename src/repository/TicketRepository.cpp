@@ -122,6 +122,5 @@ void TicketRepository::saveAllTickets() {
     cout << "da luu toan bo ve ra file." << endl;
 }
 
-}
 
 
