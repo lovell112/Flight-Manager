@@ -3,9 +3,6 @@
 //
 
 #include "../../include/repository/FlightRepository.h"
-#include <iostream>
-#include <sstream>
-#include <fstream>
 
 using namespace std;
 
@@ -55,8 +52,8 @@ vector<Flight*>::iterator FlightRepository::findByID(const string& flightID) {
 vector<Flight*> FlightRepository::findByDate(const string& dateString) {
     vector<Flight*> result;
     for (auto& f : m_flights) {
-        if (f.getDepartureDate().toString() == dateString) { // so sanh
-			result.push_back(&f); // them vao ket qua
+        if (f->getDepartureDate()->toString() == dateString) { // so sanh
+			result.push_back(f); // them vao ket qua
         }
     }
     return result;
@@ -68,8 +65,8 @@ vector<Flight*> FlightRepository::findByDate(const string& dateString) {
 vector<Flight*> FlightRepository::findByDestination(const string& destination) {
     vector<Flight*> result;
     for (auto& f : m_flights) {
-        if (f.getDestinationAirport() == destination) {
-            result.push_back(&f);
+        if (f->getDestinationAirport() == destination) {
+            result.push_back(f);
         }
     }
     return result;
@@ -82,7 +79,7 @@ vector<Flight*>& FlightRepository::getAll() {
     static vector<Flight*> all;
     all.clear();
     for (auto& f : m_flights)
-        all.push_back(&f);
+        all.push_back(f);
     return all;
 }
 
@@ -90,15 +87,15 @@ vector<Flight*>& FlightRepository::getAll() {
 // doc toan bo du lieu chuyen bay tu file flights.txt
 // ------------------------------------------------------
 void FlightRepository::loadAllFlights() {
-    ifstream fin(PATH);
-    if (!fin.is_open()) {
+    ifstream reader(PATH);
+    if (!reader.is_open()) {
         cerr << "Khong doc duoc file" << endl;
         return;
     }
 
     m_flights.clear();
     string line;
-    while (getline(fin, line)) {
+    while (getline(reader, line)) {
         stringstream ss(line);
         string id, plane, dest;
         int day, month, year, hour, minute, statusInt;
@@ -107,32 +104,32 @@ void FlightRepository::loadAllFlights() {
 
         DateTime dt{ day, month, year, hour, minute };
         FlightStatus status = static_cast<FlightStatus>(statusInt);
-        Flight f(id, plane, dest, dt, status);
+        Flight* f = new Flight(id, plane, dest, dt, status);
         m_flights.push_back(f);
     }
 
-    fin.close();
+    reader.close();
 }
 
 // ------------------------------------------------------
 // ghi toan bo du lieu chuyen bay vao file flights.txt
 // ------------------------------------------------------
 void FlightRepository::saveAllFlights() {
-    ofstream fout(PATH);
-    if (!fout.is_open()) {
+    ofstream writer(PATH);
+    if (!writer.is_open()) {
         cerr << "Khong viet duoc file" << endl;
         return;
     }
 
     for (auto& f : m_flights) {
-        DateTime d = f.getDepartureDate();
-        fout << f.getFlightID() << " "
-            << f.getAirplaneID() << " "
-            << f.getDestinationAirport() << " "
-            << d.day << " " << d.month << " " << d.year << " "
-            << d.hour << " " << d.minute << " "
+        DateTime d = f->getDepartureDate();
+        writer << f->getFlightID() << " "
+            << f->getAirplaneID() << " "
+            << f->getDestinationAirport() << " "
+            << d->day << " " << d.month << " " << d.year << " "
+            << d->hour << " " << d.minute << " "
             << static_cast<int>(f.getStatus()) << "\n";
     }
 
-    fout.close();
+    writer.close();
 }
