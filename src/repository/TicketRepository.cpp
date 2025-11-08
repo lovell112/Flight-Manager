@@ -89,11 +89,11 @@ void TicketRepository::loadAllTickets() {
     }
 
     m_tickets.clear();
-    string id, date, destination, passengerName;
-    double price;
+    string id, date, destination;
+  
 
-    while (inFile >> id >> date >> destination >> passengerName >> price) {
-        Ticket* t = new Ticket(id, date, destination, passengerName, price);
+    while (inFile >> id >> date >> destination) {
+        Ticket* t = new Ticket(id, date, destination);
         m_tickets.push_back(t);
     }
 
@@ -115,13 +115,13 @@ void TicketRepository::saveAllTickets() {
     for (auto ticket : m_tickets) {
         outFile << ticket->getID() << " "
                 << ticket->getDate() << " "
-                << ticket->getDestination() << " "
-                << ticket->getPassengerName() << " "
-                << ticket->getPrice() << "VND" endl;
+                << ticket->getDestination() << " " << endl;
     }
 
     outFile.close();
     cout << "da luu toan bo ve ra file." << endl;
+}
+
 }
 
 
