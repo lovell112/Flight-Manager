@@ -38,7 +38,7 @@ void TicketRepository::remove(const string& ticketID) {
 // tim ve theo ID
 vector<Ticket*>::iterator TicketRepository::findByID(const string& id) {
     for (auto it = m_tickets.begin(); it != m_tickets.end(); ++it) {
-        if ((*it)->getID() == id) {
+        if ((*it)->getTicketID() == id) {
             return it;
         }
     }
@@ -105,20 +105,19 @@ void TicketRepository::loadAllTickets() {
 // luu toan bo ve ra file
 //
 void TicketRepository::saveAllTickets() {
-    ofstream outFile(PATH);
+    ofstream writer(PATH);
     // kiem tra doc file
-    if (!outFile) {
+    if (!writer) {
         cerr << "khong the mo duoc file ticket.txt!" << endl;
         return;
     }
 
     for (auto ticket : m_tickets) {
-        outFile << ticket->getID() << " "
-                << ticket->getDate() << " "
+        writer << ticket->getTicketID() << " "
                 << ticket->getDestination() << " " << endl;
     }
 
-    outFile.close();
+    writer.close();
     cout << "da luu toan bo ve ra file." << endl;
 }
 

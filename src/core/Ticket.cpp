@@ -16,16 +16,44 @@ Ticket::Ticket(const string& ticketID, const string& flightID,
 
 Ticket::~Ticket() {}
 
-string Ticket::getTicket() const {
+const string& Ticket::getTicketID() const {
     return m_strTicketID;
+}
+
+const string& Ticket::getFlightID() const {
+    return m_strFlightID;
+}
+
+const string& Ticket::getCustomerID() const {
+    return m_strCustomerID;
+}
+
+const string& Ticket::getCustomerName() const {
+    return m_strCustomerName;
 }
 
 int Ticket::getSeatNumber() const {
     return m_iSeatNumber;
 }
 
-string Ticket::getCustomer() const {
-    return m_strCustomerID;
+void Ticket::setTicketID(const string& newID) {
+    m_strTicketID = newID;
+}
+
+void Ticket::setFlightID(const string& newID) {
+    m_strFlightID = newID;
+}
+
+void Ticket::setCustomerID(const string& newID) {
+    m_strCustomerID = newID;
+}
+
+void Ticket::setCustomerName(const string& newName) {
+    m_strCustomerName = newName;
+}
+
+void Ticket::setSeatNumber(const int newSeatNumber) {
+    m_iSeatNumber = newSeatNumber;
 }
 
 //tra ve dang chuoi

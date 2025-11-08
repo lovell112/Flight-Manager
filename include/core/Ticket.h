@@ -16,9 +16,16 @@ class Ticket {
 public:
     Ticket(const string&, const string&, const string&, const string&, const int&);
     ~Ticket();
-    string getTicket() const;
+    const string& getTicketID() const;
+    const string& getFlightID() const;
+    const string& getCustomerID() const;
+    const string& getCustomerName() const;
     int getSeatNumber() const;
-    string getCustomer() const;
+    void setTicketID(const string&);
+    void setFlightID(const string&);
+    void setCustomerID(const string&);
+    void setCustomerName(const string&);
+    void setSeatNumber(int);
     string toString() const;
     void printTicketInfo();
 };
