@@ -7,22 +7,22 @@
 #include "../core/Ticket.h"
 #include <string>
 #include <fstream>
+#include <filesystem>
 #include <sstream>
 #include <vector>
 using namespace std;
 
 class TicketRepository {
     vector<Ticket*> m_tickets;
-    const string PATH = "../data/tickets";
+    const string FOLDER_PATH = "../data/tickets";
 public:
     TicketRepository();
     ~TicketRepository();
     void add(const Ticket&);
     void remove(const string&);
     vector<Ticket*>::iterator findByID(const string&);
-    vector<Ticket*> findByDate(const string&);
-    vector<Ticket*> findByDestination(const string&);
     vector<Ticket*>& getAll();
+    const vector<Ticket*>::iterator undefineTicket();
     void loadAllTickets();
     void saveAllTickets();
 };

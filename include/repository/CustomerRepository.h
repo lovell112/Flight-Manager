@@ -21,8 +21,8 @@ public:
     void remove(const string&);
     
     vector<Customer*>::iterator findByID(const string&);
-    vector<Customer*>::iterator getAll();
-    vector<Customer*>::iterator end();
+    vector<Customer*>& getAll();
+    vector<Customer*>::iterator undefineCustomer();
     
     void loadAllCustomers();
     void saveAllCustomers() const;

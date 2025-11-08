@@ -17,15 +17,15 @@ public:
     ~Airplane();
 
     //  Getter
-    string getID() const;
-    int getSeatCount() const;
+    [[nodiscard]] string getID() const;
+    [[nodiscard]] int getSeatCount() const;
     vector<bool>& getSeatList();
 
     //  Setter
     void setSeatCount(int);
 
     //  Logic
-    string toString() const;
+    [[nodiscard]] string toString() const;
     void printAirplaneInfo() const;
 };
 

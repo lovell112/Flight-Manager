@@ -15,6 +15,8 @@ private:
     vector<Flight*> m_flights;
 
 public:
+    FlightRepository();
+    ~FlightRepository();
     void add(const Flight&);
     void remove(const string&);
     void setFlightStatus(const string&, const FlightStatus&);
@@ -22,6 +24,8 @@ public:
     vector<Flight*>::iterator findByID(const string&);
     vector<Flight*> findByDate(const string&);
     vector<Flight*> findByDestination(const string&);
+
+    [[nodiscard]] vector<Flight*>::iterator undefineFlight();
 
     vector<Flight*>& getAll();
     void loadAllFlights();

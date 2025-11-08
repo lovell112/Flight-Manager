@@ -26,32 +26,33 @@ private:
 public:
 
     Flight() = default;
-    Flight(const string& flightID,
-        const string& airplaneID,
-        const string& destination,
-        const DateTime& departure,
-        const FlightStatus& status,
-        const vector<Ticket>& tickets = {});
-    ~Flight() = default;
+    Flight(const string &flightID,
+        const string &airplaneID,
+        const string &destination,
+        const string &departure,
+        const FlightStatus &status,
+        const vector<string> &tickets);
+    ~Flight();
 
-  
-    string getFlightID() const;
+
+
+    [[nodiscard]] const string& getFlightID() const;
+    [[nodiscard]] const string& getAirplaneID() const;
+    [[nodiscard]] const string& getDestinationAirport() const;
+    [[nodiscard]] const DateTime& getDepartureDate() const;
+    [[nodiscard]] FlightStatus getStatus() const;
+    vector<string>& getTickets();
+
     void setFlightID(const string&);
-    string getAirplaneID() const;
     void setAirplaneID(const string&);
-    string getDestinationAirport() const;
     void setDestinationAirport(const string&);
-    DateTime getDepartureDate() const;
-    void setDepartureDate(const DateTime&);
-    FlightStatus getStatus() const;
-    vector<Ticket>& getTickets(); 
+    void setDepartureDate(const string&) const;
+    void setFlightStatus(const FlightStatus&);
 
-
-    void setStatus(FlightStatus newStatus);
     void addTicket(const string&);
     void removeTicket(const string&);
 
-    string toString() const;
+    [[nodiscard]] const string toString() const;
     void printFlightInfo() const;
 };
 

@@ -1,6 +1,3 @@
-//
-// Created by HP on 05/11/2025.
-//
 #ifndef AIRPLANEMANAGER_TICKET_H
 #define AIRPLANEMANAGER_TICKET_H
 #include <iostream>
@@ -14,7 +11,7 @@ class Ticket {
     int m_iSeatNumber;
 
 public:
-    Ticket(const string&, const string&, const string&, const string&, const int&);
+    Ticket(const string&, const string&, const string&, const string&, int);
     ~Ticket();
     const string& getTicketID() const;
     const string& getFlightID() const;

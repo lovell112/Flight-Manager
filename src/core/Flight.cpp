@@ -9,73 +9,88 @@
 Flight::Flight(const string& flightID,
     const string& airplaneID,
     const string& destination,
-    const DateTime& departure,
+    const string& departure,
     const FlightStatus& status,
-    const vector<Ticket>& tickets)
+    const vector<string>& tickets)
     : m_strFlightID(flightID),
     m_strAirplaneID(airplaneID),
     m_strDestinationAirport(destination),
-    m_departureDate(departure),
+    m_departureDate(new DateTime(departure)),
     m_status(status),
-    m_tickets(tickets) {
+    m_tickets(tickets) {}
+
+Flight::~Flight() {
+    delete m_departureDate;
 }
 
-Flight::~Flight() = default;
-
-string Flight::getFlightID() const {
+const string& Flight::getFlightID() const {
     return m_strFlightID;
 }
 
-void Flight::setFlightID(const string& id) { 
-    m_strFlightID = id; 
-}
-
-string Flight::getAirplaneID() const {
+const string& Flight::getAirplaneID() const {
     return m_strAirplaneID;
 }
 
-void Flight::setAirplaneID(const string& id) { 
-    m_strAirplaneID = id; 
-}
-
-string Flight::getDestinationAirport() const {
+const string& Flight::getDestinationAirport() const {
     return m_strDestinationAirport;
 }
 
-void Flight::setDestinationAirport(const string& dest) { 
-    m_strDestinationAirport = dest;
-}
-
-DateTime Flight::getDepartureDate() const {
-    return m_departureDate;
-}
-
-void Flight::setDepartureDate(const DateTime& date) { 
-    m_departureDate = date; 
+const DateTime& Flight::getDepartureDate() const {
+    return *m_departureDate;
 }
 
 FlightStatus Flight::getStatus() const {
     return m_status;
 }
 
-vector<Ticket>& Flight::getTickets() {
+vector<string>& Flight::getTickets() {
     return m_tickets;
 }
 
+void Flight::setFlightID(const string& id) {
+    m_strFlightID = id;
+}
 
-void Flight::setStatus(FlightStatus newStatus) {
-    m_status = newStatus;
+void Flight::setAirplaneID(const string& id) {
+    m_strAirplaneID = id;
+}
+
+
+void Flight::setDestinationAirport(const string& dest) {
+    m_strDestinationAirport = dest;
+}
+
+void Flight::setDepartureDate(const string& date) const {
+    m_departureDate->set(date);
+}
+
+void Flight::setFlightStatus(const FlightStatus& status) {
+    m_status = status;
 }
 
 void Flight::addTicket(const string& ticketID) { m_tickets.push_back(ticketID); }
 
-void Ticket::removeTicket(const string& ticketID) { m_tickets.erase(remove(m_tickets.begin(), m_tickets.end(), ticketID), m_tickets.end()); }
+void Flight::removeTicket(const string& ticketID) { m_tickets.erase(remove(m_tickets.begin(), m_tickets.end(), ticketID), m_tickets.end()); }
 
-string Flight::toString() const {
-    return "FlightID: " + m_strFlightID +
-        ", AirplaneID: " + m_strAirplaneID +
-        ", Destination: " + m_strDestinationAirport +
-        ", Departure: " + m_departureDate.toString();
+const string Flight::toString() const {
+    string result;
+    result += m_strFlightID + "|" +
+        m_strAirplaneID + "|" +
+        m_strDestinationAirport + "|" +
+        m_departureDate->toString() + "|";
+    if (m_status == FlightStatus::CANCELLED)
+        result += to_string(0);
+    else if (m_status == FlightStatus::AVAILABLE)
+        result += to_string(1);
+    else if (m_status == FlightStatus::SOLD_OUT)
+        result += to_string(2);
+    else
+        result += to_string(3);
+
+    for (auto& ticketID : m_tickets)
+        result += "|" + ticketID;
+
+    return result;
 }
 
 void Flight::printFlightInfo() const {
@@ -96,7 +111,7 @@ void Flight::printFlightInfo() const {
     }
     else {
         for (const auto& t : m_tickets)
-            cout << t.getTicketID() << " ";
+            cout << t << " ";
     }
     cout << endl;
 }

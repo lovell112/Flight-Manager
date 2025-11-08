@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <filesystem>
 #include <sstream>
 #include <iostream>
 using namespace std;
@@ -28,6 +29,9 @@ public:
 
     // // Truy cập toàn bộ danh sách
     vector<Airplane*>& getAll();
+
+    // undefine object
+    [[nodiscard]] const vector<Airplane*>::iterator undefineAirplane();
 
     // Load / Save dữ liệu
     void loadAllAirplanes();

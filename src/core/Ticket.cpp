@@ -1,11 +1,7 @@
-//
-// Created by HP on 05/11/2025.
-//
-
 #include "../../include/core/Ticket.h"
 Ticket::Ticket(const string& ticketID, const string& flightID,
                const string& customerID, const string& customerName,
-               const int& seatNumber) {
+               const int seatNumber) {
     m_strTicketID = ticketID;
     m_strFlightID = flightID;
     m_strCustomerID = customerID;

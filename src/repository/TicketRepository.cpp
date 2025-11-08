@@ -18,8 +18,7 @@ TicketRepository::~TicketRepository() {
 }
     // them ve vao danh sach
 void TicketRepository::add(const Ticket& ticket) {
-    Ticket* newTicket = new Ticket(ticket);
-    m_tickets.push_back(newTicket);
+    m_tickets.push_back(new Ticket(ticket));
 }
 
 
@@ -27,7 +26,7 @@ void TicketRepository::add(const Ticket& ticket) {
 
 void TicketRepository::remove(const string& ticketID) {
     auto it = findByID(ticketID);
-    if (it != m_tickets.end()) {
+    if (it != undefineTicket()) {
         delete *it;  // Giai phong bo nho
         m_tickets.erase(it);
     } else {
@@ -42,35 +41,8 @@ vector<Ticket*>::iterator TicketRepository::findByID(const string& id) {
             return it;
         }
     }
-    return m_tickets.end(); // khong tim thay thi return
+    return undefineTicket(); // khong tim thay thi return
 }
-
-
-// tim ve theo ngay
-
-vector<Ticket*> TicketRepository::findByDate(const string& date) {
-    vector<Ticket*> result;
-    for (auto ticket : m_tickets) {
-        if (ticket->getDate() == date) {
-            result.push_back(ticket);
-        }
-    }
-    return result;
-}
-
-
- //tim ve theo điem den
-
-vector<Ticket*> TicketRepository::findByDestination(const string& destination) {
-    vector<Ticket*> result;
-    for (auto ticket : m_tickets) {
-        if (ticket->getDestination() == destination) {
-            result.push_back(ticket);
-        }
-    }
-    return result;
-}
-
 
 // lay toan bo danh sach vé
 // ===============================
@@ -78,46 +50,70 @@ vector<Ticket*>& TicketRepository::getAll() {
     return m_tickets;
 }
 
+const vector<Ticket *>::iterator TicketRepository::undefineTicket() {
+    return m_tickets.end();
+}
+
 
 // tai du lieu ve tu file ra
-
 void TicketRepository::loadAllTickets() {
-    ifstream inFile(PATH);
-    if (!inFile) {
-        cerr << "khong mo duoc file!" << endl;
-        return;
+
+    // truy cap vao thu muc, doc tung file mot
+    for (auto& entry : filesystem::directory_iterator(FOLDER_PATH)) {
+        // chi lay file
+        if (entry.is_regular_file()) {
+            // const string PATH = FOLDER_PATH + "/" + entry.path().filename().string();
+            const string PATH = entry.path().string();
+            ifstream reader(PATH);
+            if (!reader.is_open()) {
+                cerr << "khong mo duoc file ticket!" << endl;
+                return;
+            }
+
+            m_tickets.clear();
+            string ticketID, flightID, customerID, customerName, seatNumber;
+            string line;
+            getline(reader, line);
+            stringstream spliter(line);
+            getline(spliter, ticketID, '|');
+            getline(spliter, flightID, '|');
+            getline(spliter, customerID, '|');
+            getline(spliter, customerName, '|');
+            getline(spliter, seatNumber, '|');
+            Ticket* ticket = new Ticket(ticketID, flightID, customerID, customerName, stoi(seatNumber));
+            m_tickets.push_back(ticket);
+            reader.close();
+        }
     }
 
-    m_tickets.clear();
-    string id, date, destination;
-  
-
-    while (inFile >> id >> date >> destination) {
-        Ticket* t = new Ticket(id, date, destination);
-        m_tickets.push_back(t);
-    }
-
-    inFile.close();
-    cout << "da tai " << m_tickets.size() << " ve tu file" << endl;
+    // cout << "da tai " << m_tickets.size() << " ve tu file" << endl;
 }
 
 //
 // luu toan bo ve ra file
 //
 void TicketRepository::saveAllTickets() {
-    ofstream writer(PATH);
-    // kiem tra doc file
-    if (!writer) {
-        cerr << "khong the mo duoc file ticket.txt!" << endl;
-        return;
+
+    // for (auto& entry : filesystem::directory_iterator(FOLDER_PATH)) {
+    //     if (entry.is_regular_file())
+    //         filesystem::remove(entry);
+    // }
+
+    for (auto& ticket : m_tickets) {
+        cout << ticket->toString() << endl;
+        const string PATH = FOLDER_PATH + "/" + ticket->getTicketID();
+        ofstream writer(PATH);
+        // kiem tra doc file
+        if (!writer) {
+            cerr << "khong the mo duoc file ticket.txt!" << endl;
+            return;
+        }
+
+        writer << ticket->toString();
+
+        writer.close();
     }
 
-    for (auto ticket : m_tickets) {
-        writer << ticket->getTicketID() << " "
-                << ticket->getDestination() << " " << endl;
-    }
-
-    writer.close();
     cout << "da luu toan bo ve ra file." << endl;
 }
 

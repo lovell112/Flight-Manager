@@ -1,4 +1,4 @@
-#include "Customer.h"
+#include "../../include/core/Customer.h"
 #include <iostream>
 
 Customer::Customer() {
@@ -8,19 +8,19 @@ Customer::Customer() {
 }
 
 // Constructor có tham số - khởi tạo với giá trị được truyền vào
-Customer::Customer(int number, string fullName, string id) {
+Customer::Customer(const int number, const string& fullName, const string& id) {
     m_iNumber = number;
     m_strFullName = fullName;
     m_strID = id;
 }
 
 // lấy ID khách hàng
-const string Customer::getCustomerID() const {
+const string& Customer::getCustomerID() const {
     return m_strID;
 }
 
 // lấy tên đầy đủ
-const string Customer::getFullName() const {
+const string& Customer::getFullName() const {
     return m_strFullName;
 }
 
@@ -29,11 +29,24 @@ const int Customer::getNumber() const {
     return m_iNumber;
 }
 
+// sua so thu tu
+void Customer::setNumber(int number) {
+    m_iNumber = number;
+}
+
+// sua ho ten
+void Customer::setFullname(const string& fullname) {
+    m_strFullName = fullname;
+}
+
+// sua cmnd
+void Customer::setCustomerID(const string& customerID) {
+    m_strID = customerID;
+}
+
 // chuyển đối tượng thành chuỗi
 const string Customer::toString() const {
-    return "Customer m_strAirplaneID: " + m_strID +
-        "\nItem: " + m_strFullName +
-        "\nNumber: " + to_string(m_iNumber);
+    return to_string(m_iNumber) + "|" + m_strFullName + "|" + m_strID;
 }
 
 // in ra thông tin

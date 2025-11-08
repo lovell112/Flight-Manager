@@ -23,7 +23,7 @@ void CustomerRepository::add(const Customer& customer) {
 // remove - xoa khach hang theo ID
 void CustomerRepository::remove(const string& customerID) {
     auto it = findByID(customerID);
-    if (it != m_customers.end()) {
+    if (it != undefineCustomer()) {
         delete *it;
         m_customers.erase(it);
     }
@@ -36,18 +36,19 @@ vector<Customer*>::iterator CustomerRepository::findByID(const string& customerI
             return it;
         }
     }
+
+    return undefineCustomer();
+}
+
+// getAll - tra ve danh sach customer
+vector<Customer*>& CustomerRepository::getAll() {
+    return m_customers;
+}
+
+// tra ve 1 phan tu khong hop le trong danh sach - o day se la iterator end
+vector<Customer*>::iterator CustomerRepository::undefineCustomer() {
     return m_customers.end();
 }
-
-// getAll - tra ve iterator dau tien
-vector<Customer*>::iterator CustomerRepository::getAll() {
-    return m_customers.begin();
-}
-
-vector<Customer*>::iterator CustomerRepository::end() {
-    return m_customers.end();
-}
-
 
 void CustomerRepository::loadAllCustomers() {
     ifstream reader(PATH);
@@ -56,6 +57,7 @@ void CustomerRepository::loadAllCustomers() {
         cerr << "Khong doc duoc file\n";
         return;
     }
+
     // Doc 1 dong, sau do tach du lieu tu dong doc duoc
     string line;
     while (getline(reader, line)) {
@@ -82,11 +84,10 @@ void CustomerRepository::saveAllCustomers() const {
         cerr << "Khong viet duoc file\n";
         return;
     }
-    
-    for (const auto& customer : m_customers) {
-        writer << customer->getNumber() << "|" 
-               << customer->getFullName() << "|" 
-               << customer->getCustomerID() << endl;
-    }
+
+    // ghi ra file theo dinh dang cua obj
+    for (auto& customer : m_customers)
+        writer << customer->toString() << endl;
+
     writer.close();
 }

@@ -23,7 +23,7 @@ void AirplaneRepository::add(const Airplane& airplane) {
 // ====== Xóa máy bay theo ID ======
 void AirplaneRepository::remove(const string& id) {
     auto it = findByID(id);
-    if (it != m_airplanes.end()) {
+    if (it != undefineAirplane()) {
         delete *it;
         m_airplanes.erase(it);
     }
@@ -35,7 +35,7 @@ vector<Airplane*>::iterator AirplaneRepository::findByID(const string& id) {
         if ((*it)->getID() == id)
             return it;
     }
-    return m_airplanes.end();
+    return undefineAirplane();
 }
 
 // ====== Lấy danh sách ghế của máy bay ======
@@ -43,7 +43,7 @@ vector<int> AirplaneRepository::getSeatList(const string& id) {
     auto it = findByID(id);
     vector<int> result;
 
-    if (it != m_airplanes.end()) {
+    if (it != undefineAirplane()) {
         vector<bool> seats = (*it)->getSeatList();
         for (bool s : seats)
             result.push_back(s ? 1 : 0);
@@ -54,6 +54,11 @@ vector<int> AirplaneRepository::getSeatList(const string& id) {
 // ====== Lấy toàn bộ danh sách ======
 vector<Airplane*>& AirplaneRepository::getAll() {
     return m_airplanes;
+}
+
+// tra ve 1 doi tuong khong ton tai theo dang iterator - o day se la iterator end
+const vector<Airplane *>::iterator AirplaneRepository::undefineAirplane() {
+    return m_airplanes.end();
 }
 
 // ====== Load dữ liệu từ file ======
