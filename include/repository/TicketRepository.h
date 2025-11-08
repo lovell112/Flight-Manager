@@ -11,7 +11,7 @@
 #include <vector>
 using namespace std;
 
-class FlightRepository {
+class TicketRepository {
     vector<Ticket*> m_tickets;
     const string PATH = "../data/ticket.txt";
 public:
