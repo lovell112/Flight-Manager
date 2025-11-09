@@ -21,7 +21,6 @@ void TicketRepository::add(const Ticket& ticket) {
     m_tickets.push_back(new Ticket(ticket));
 }
 
-
 // xoa ve theo ID
 
 void TicketRepository::remove(const string& ticketID) {
@@ -93,12 +92,6 @@ void TicketRepository::loadAllTickets() {
 // luu toan bo ve ra file
 //
 void TicketRepository::saveAllTickets() {
-
-    // for (auto& entry : filesystem::directory_iterator(FOLDER_PATH)) {
-    //     if (entry.is_regular_file())
-    //         filesystem::remove(entry);
-    // }
-
     for (auto& ticket : m_tickets) {
         cout << ticket->toString() << endl;
         const string PATH = FOLDER_PATH + "/" + ticket->getTicketID();
