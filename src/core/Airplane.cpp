@@ -1,5 +1,7 @@
 #include "../../include/core/Airplane.h"
 
+#include <list>
+
 // ===== Constructor =====
 Airplane::Airplane() {
     m_strID = "";
@@ -7,12 +9,12 @@ Airplane::Airplane() {
     m_iEmptySeatCount = 0;
     m_seatList = vector<bool>(); // danh sách ghế trống rỗng
 }
-Airplane::Airplane(const string& id, int seatCount) {
-    m_strID = id;
-    m_iSeatCount = seatCount;
-    m_iEmptySeatCount = seatCount;
-    //Tạo danh sách ghế trống (false = ghế trống)
-    m_seatList.assign(seatCount, false);
+Airplane::Airplane(const string& id, const vector<bool>& seats) : m_strID(id), m_seatList(seats) {
+    m_iSeatCount = m_seatList.size();
+    m_iEmptySeatCount = m_iSeatCount;
+    for (auto seat : m_seatList)
+        if (seat)
+            m_iEmptySeatCount--;
 }
 
 // ==== Destructor =====
@@ -53,6 +55,23 @@ void Airplane::setSeatCount(int count) {
     m_iEmptySeatCount = emptyCount;
 }
 
+void Airplane::bookSeat(int seatNumber) {
+    if (seatNumber-1 < 0 || seatNumber-1 >= m_seatList.size() || m_seatList[seatNumber-1])
+        return;
+
+    m_seatList[seatNumber-1] = true;
+    m_iEmptySeatCount--;
+}
+
+void Airplane::cancelSeat(int seatNumber) {
+    if (seatNumber-1 < 0 || seatNumber-1 >= m_seatList.size() || !m_seatList[seatNumber-1])
+        return;
+
+    m_seatList[seatNumber-1] = false;
+    m_iEmptySeatCount++;
+}
+
+
 // ====Logic====
 string Airplane::toString() const {
     string info = m_strID;
@@ -61,6 +80,14 @@ string Airplane::toString() const {
         info += "|" + string(seat ? "1" : "0");
     return info;
 }
+
+// neu ghe khong hop le hoac da duoc dat return false, nguoc lai true. m_seatList[0] = false = ghe thu 0 trong
+bool Airplane::isSeatAvailable(int seatNumber) const {
+    if (seatNumber < 0 || seatNumber-1 >= m_seatList.size())
+        return false;
+    return !m_seatList[seatNumber-1];
+}
+
 
 
 void Airplane::printAirplaneInfo() const {

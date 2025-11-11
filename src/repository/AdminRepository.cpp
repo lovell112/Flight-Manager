@@ -5,6 +5,7 @@ AdminRepository::AdminRepository() {
 }
 
 AdminRepository::~AdminRepository() {
+    loadAllAdmins(); // cap nhat du lieu moi nhat
 
     // Luu lai cac tai khoan admin truoc khi delete
     saveAllAdmins();
@@ -27,9 +28,15 @@ void AdminRepository::loadAllAdmins() {
         return;
     }
 
+    for (auto& admin : m_admins)
+        delete admin;
+    m_admins.clear();
+
     // Doc 1 dong, sau do tach du lieu tu dong doc duoc
     string line;
     while (getline(reader, line)) {
+        if (line.empty())
+            continue;
         stringstream spliter(line);
         string username, password;
         getline(spliter, username, '|'); // tach username
@@ -56,6 +63,7 @@ void AdminRepository::saveAllAdmins() const {
 }
 
 vector<Admin*>::iterator AdminRepository::getValidateAdmin(const string &username, const string &password) {
+    loadAllAdmins();
     // Su dung iterator de duyet cac admin va kiem tra, neu ton tai, return 1 iterator cua admin do
     for (auto admin = m_admins.begin(); admin != m_admins.end(); admin++) {
         if ((*admin)->tryLogin(username, password))
@@ -66,9 +74,11 @@ vector<Admin*>::iterator AdminRepository::getValidateAdmin(const string &usernam
 }
 
 vector<Admin *>::iterator AdminRepository::begin() {
+    loadAllAdmins();
     return m_admins.begin();
 }
 
 vector<Admin *>::iterator AdminRepository::invalidAdmin() {
+    loadAllAdmins();
     return m_admins.end();
 }

@@ -3,11 +3,20 @@
 
 #include "../repository/CustomerRepository.h"
 #include <vector>
+
+#include "../repository/AirplaneRepository.h"
+#include "../repository/FlightRepository.h"
+#include "../repository/TicketQueueRepository.h"
+#include "../repository/TicketRepository.h"
 using namespace std;
 
 class CustomerService {
 private:
+    TicketRepository* m_ticketRepository;
     CustomerRepository* m_customerRepository;
+    FlightRepository* m_flightRepository;
+    AirplaneRepository* m_airplaneRepository;
+    TicketQueueRepository* m_ticketQueueRepository;
 
 public:
     CustomerService();
@@ -16,9 +25,12 @@ public:
     void addCustomer(const Customer&);
     void removeCustomer(const string&);
 
+    bool tryBookTicket(const string&, const string&, const string&, int);
+    // bool tryCancelTicket(const string&, const string&);
+
     vector<Customer*>::iterator findCustomerByID(const string&);
-    vector<Customer*>::iterator getAll();
-    vector<Customer*>::iterator end();
+    vector<Customer*>& getAll();
+    vector<Customer*>::iterator undefineCustomer();
 };
 
 #endif //FLIGHTMANAGER_CUSTOMERSERVICE_H

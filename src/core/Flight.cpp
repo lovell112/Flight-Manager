@@ -39,7 +39,7 @@ const DateTime& Flight::getDepartureDate() const {
     return *m_departureDate;
 }
 
-FlightStatus Flight::getStatus() const {
+const FlightStatus& Flight::getStatus() const {
     return m_status;
 }
 

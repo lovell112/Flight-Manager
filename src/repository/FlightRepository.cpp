@@ -1,7 +1,3 @@
-//
-// Created by HP on 05/11/2025.
-//
-
 #include "../../include/repository/FlightRepository.h"
 
 using namespace std;
@@ -11,6 +7,7 @@ FlightRepository::FlightRepository() {
 }
 
 FlightRepository::~FlightRepository() {
+    loadAllFlights();
     saveAllFlights();
     for (auto& flight : m_flights) {
         delete flight;
@@ -23,35 +20,45 @@ FlightRepository::~FlightRepository() {
 // them chuyen bay moi
 // ------------------------------------------------------
 void FlightRepository::add(const Flight& flight) {
+    loadAllFlights();
 	m_flights.push_back(new Flight(flight)); // them vao vector
+    saveAllFlights();
+    loadAllFlights();
 }
 
 // ------------------------------------------------------
 // xoa chuyen bay
 // ------------------------------------------------------
 void FlightRepository::remove(const string& flightID) {
+    loadAllFlights();
     vector<Flight *>::iterator flight = findByID(flightID);
     if (flight != undefineFlight()) {
         delete *flight;
         m_flights.erase(flight);
     } else
         cerr << "Chuyen bay " << flightID << " khong ton tai.\n";
+    saveAllFlights();
+    loadAllFlights();
 }
 
 // ------------------------------------------------------
 // cap nhat trang thai chuyen bay
 // ------------------------------------------------------
 void FlightRepository::setFlightStatus(const string& flightID, const FlightStatus& status) {
+    loadAllFlights();
 	auto it = findByID(flightID); // dung ham tim kiem
 	if (it != undefineFlight()) {  // cap nhat neu tim thay
         (*it)->setFlightStatus(status);
     }
+    saveAllFlights();
+    loadAllFlights();
 }
 
 // ------------------------------------------------------
 // tim theo ID
 // ------------------------------------------------------
 vector<Flight*>::iterator FlightRepository::findByID(const string& flightID) {
+    loadAllFlights();
     for (auto it = m_flights.begin(); it != m_flights.end(); ++it) {
         if ((*it)->getFlightID() == flightID)
 			return it; // tra ve iterator neu tim thay
@@ -63,6 +70,7 @@ vector<Flight*>::iterator FlightRepository::findByID(const string& flightID) {
 // tim theo ngay
 // ------------------------------------------------------
 vector<Flight*> FlightRepository::findByDate(const string& dateString) {
+    loadAllFlights();
     vector<Flight*> result;
     for (auto& flight : m_flights) {
         if (flight->getDepartureDate().toString() == dateString) { // so sanh
@@ -76,6 +84,7 @@ vector<Flight*> FlightRepository::findByDate(const string& dateString) {
 // tim theo destination
 // ------------------------------------------------------
 vector<Flight*> FlightRepository::findByDestination(const string& destination) {
+    loadAllFlights();
     vector<Flight*> result;
     for (auto& flight : m_flights) {
         if (flight->getDestinationAirport() == destination) {
@@ -85,10 +94,21 @@ vector<Flight*> FlightRepository::findByDestination(const string& destination) {
     return result;
 }
 
+vector<Flight *> FlightRepository::findByAirplane(const string &airplaneID) {
+    vector<Flight*> res;
+    for (auto flight: m_flights) {
+        if (flight->getAirplaneID() == airplaneID)
+            res.push_back(flight);
+    }
+
+    return res;
+}
+
 // ------------------------------------------------------
 // tra ve 1 chuyen bay khong ton tai theo dinh dang iterator - o day se la iterator end
 // ------------------------------------------------------
 vector<Flight *>::iterator FlightRepository::undefineFlight() {
+    loadAllFlights();
     return m_flights.end();
 }
 
@@ -96,6 +116,7 @@ vector<Flight *>::iterator FlightRepository::undefineFlight() {
 // lay tat ca chuyen bay
 // ------------------------------------------------------
 vector<Flight*>& FlightRepository::getAll() {
+    loadAllFlights();
     return m_flights;
 }
 
@@ -118,6 +139,8 @@ void FlightRepository::loadAllFlights() {
     // doc tung dong trong flight.txt
     string line;
     while (getline(reader, line)) {
+        if (line.empty())
+            continue;
         stringstream spliter(line);
         string flightID, airplaneID, destination, departure, statusString;
         vector<string> tickets;

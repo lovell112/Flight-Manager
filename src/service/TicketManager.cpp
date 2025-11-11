@@ -1,86 +1,126 @@
-//
-// Created by HP on 05/11/2025.
-//
-
 #include "../../include/service/TicketManager.h"
+
+void TicketManager::saveData() {
+    m_ticketRepository->saveAllTickets();
+    m_flightRepository->saveAllFlights();
+    m_airplaneRepository->saveAllAirplanes();
+    m_ticketQueueRepository->saveAllTickets();
+    m_customerRepository->saveAllCustomers();
+}
+void TicketManager::loadData() {
+    m_ticketRepository->loadAllTickets();
+    m_flightRepository->loadAllFlights();
+    m_airplaneRepository->loadAllAirplanes();
+    m_ticketQueueRepository->loadAllTickets();
+    m_customerRepository->loadAllCustomers();
+}
+
 TicketManager::TicketManager() {
-    m_flightRepository = new FlightRepository();
     m_ticketRepository = new TicketRepository();
-    m_customerService = new CustomerService();
+    m_flightRepository = new FlightRepository();
+    m_airplaneRepository = new AirplaneRepository();
+    m_ticketQueueRepository = new TicketQueueRepository();
+    m_customerRepository = new CustomerRepository();
 }
 
 // giai phong bo nho
 TicketManager::~TicketManager() {
-    delete m_flightRepository;
     delete m_ticketRepository;
-    delete m_customerService;
+    delete m_flightRepository;
+    delete m_airplaneRepository;
+    delete m_ticketQueueRepository;
+    delete m_customerRepository;
 }
 
+void TicketManager::addTicket(const Ticket &ticket) {
+    m_ticketRepository->add(ticket);
 
-bool TicketManager::tryBookTicket(const string& flightID, const string& customerID, int seatNumber) {
-    // Kiem tra chuyen bay co ton tai khong
-    Flight* flight = m_flightRepository->findByID(flightID);
-    if (!flight) {
-        cout << "Khong tim thay chuyen bay voi ID: " << flightID << endl;
-        return false; // khong thi return
-    }
+    auto flight = m_flightRepository->findByID(ticket.getFlightID());
+    auto airplane = m_airplaneRepository->findByID((*flight)->getAirplaneID());
+    (*flight)->addTicket(ticket.getTicketID());
+    (*airplane)->bookSeat(ticket.getSeatNumber());
 
-    // Kiem tra khach hang co ton tai khong
-    Customer* customer = m_customerService->findByID(customerID);
-    if (!customer) {
-        cout << "Khong tim thay khach hang voi ID: " << customerID << endl;
-        return false;
-    }
+    m_ticketQueueRepository->remove(ticket.getTicketID()); // delete ve khoi hang doi
+    m_customerRepository->remove(ticket.getCustomerID()); // delete khoi hang doi khach cho mua
 
-    // kiem tra ghe trong khong
-    if (!flight->isSeatAvailable(seatNumber)) {
-        cout << "Ghe da duoc dat!" << endl;
-        return false;
-    }
-
-    // tao ve moi va them vao repo
-    Ticket* newTicket = new Ticket(flightID, customerID, customer->getName(), seatNumber);
-    m_ticketRepository->addTicket(newTicket);
-
-    //cap nhat trang thai ghe
-    flight->bookSeat(seatNumber);
-
-    cout << "Dat ve thanh cong cho khach: " << customer->getName() << endl;
-    return true;
+    saveData();
+    loadData();
 }
 
-
-bool TicketManager::tryCancelTicket(const string& ticketID) {
-    // tim ve
-    Ticket* ticket = m_ticketRepository->findByID(ticketID);
-    if (!ticket) {
-        cout << "Khong tim thay ve voi ID: " << ticketID << endl;
-        return false;
+void TicketManager::removeTicket(const string &ticketID) {
+    auto ticket = m_ticketRepository->findByID(ticketID);
+    if (ticket == m_ticketRepository->undefineTicket()) {
+        cout << "Khong ton tai ve : " << ticketID << endl;
+        return;
     }
 
-    // lay thong tin chuyen bay de mo lai ghe
-    Flight* flight = m_flightRepository->findByID(ticket->getFlightID());
-    if (flight) {
-        flight->cancelSeat(ticket->getSeatNumber());
+    auto flight = m_flightRepository->findByID((*ticket)->getFlightID());
+    if ((*flight)->getStatus() == FlightStatus::COMPLETED) {
+        cout << "Chuyen bay " << (*flight)->getFlightID() << " da hoan tat, khong the tra ve\n";
+        return;
     }
 
-    // Xoa ve khoi repository
-    m_ticketRepository->removeTicket(ticketID);
+    auto airplane = m_airplaneRepository->findByID((*flight)->getAirplaneID());
+    m_ticketRepository->remove(ticketID);
+    (*flight)->removeTicket(ticketID);
+    (*airplane)->cancelSeat((*ticket)->getSeatNumber());
 
-    cout << "Huy ve thanh cong: " << ticketID << endl;
-    return true;
+    saveData();
+    loadData();
 }
 
+vector<Ticket*> TicketManager::findByDate(const string& date) {
+    loadData();
+    const auto& tickets = m_ticketRepository->getAll();
+    vector<Ticket*> result;
+    for (const auto ticket : tickets) {
+        auto flight = m_flightRepository->findByID(ticket->getFlightID());
+        if ((*flight)->getDepartureDate() == DateTime(date))
+            result.push_back(ticket);
+    }
 
-vector<Ticket*>& TicketManager::findByDate(const string& date) {
-    return m_ticketRepository->findByDate(date);
+    return result;
 }
-
 
 vector<Ticket*>::iterator TicketManager::findByID(const string& ticketID) {
-    return m_ticketRepository->findIteratorByID(ticketID);
+    loadData();
+    return m_ticketRepository->findByID(ticketID);
 }
 
-vector<Ticket*>& TicketManager::findByDestination(const string& destination) {
-    return m_ticketRepository->findByDestination(destination);
+vector<Ticket*> TicketManager::findByDestination(const string& destination) {
+    loadData();
+    const auto& tickets = m_ticketRepository->getAll();
+    vector<Ticket*> result;
+    for (const auto ticket : tickets) {
+        auto flight = m_flightRepository->findByID(ticket->getFlightID());
+        if ((*flight)->getDestinationAirport() == destination)
+            result.push_back(ticket);
+    }
+
+    return result;
+}
+
+vector<Ticket *> TicketManager::findByFlightID(const string &flightID) {
+    m_ticketRepository->findByFlightID(flightID);
+}
+
+
+TicketRepository &TicketManager::getTicketRepository() {
+    loadData();
+    return *m_ticketRepository;
+}
+
+FlightRepository &TicketManager::getFlightRepository() {
+    loadData();
+    return *m_flightRepository;
+}
+
+AirplaneRepository &TicketManager::getAirplaneRepository() {
+    loadData();
+    return *m_airplaneRepository;
+}
+
+TicketQueueRepository &TicketManager::getTicketQueueRepository() {
+    loadData();
+    return *m_ticketQueueRepository;
 }

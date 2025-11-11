@@ -5,6 +5,7 @@
 #include "../repository/FlightRepository.h"
 #include "../repository/TicketRepository.h"
 #include "../core/FlightStatus.h"
+#include "../repository/CustomerRepository.h"
 
 
 using namespace std;
@@ -12,19 +13,27 @@ class FlightManager {
     FlightRepository* m_flightRepository;
     TicketRepository* m_ticketRepository;
     AirplaneRepository* m_airplaneRepository;
+    CustomerRepository* m_customerRepository;
+
+    void saveData();
+    void loadData();
 public:
-    FlightManager(FlightRepository*, TicketRepository*, AirplaneRepository*);
+    FlightManager();
+    FlightManager(FlightRepository*, TicketRepository*, AirplaneRepository*, CustomerRepository*);
     ~FlightManager();
-    void addFlight(const Flight&) const;
-    void cancelFlight(const string&) const;
-    void updateFlightStatus(const string&, const FlightStatus&) const;
+    void addFlight(const Flight&);
+    void cancelFlight(const string&);
+    void updateFlightStatus(const string&, const FlightStatus&);
 
-    vector<Flight*>::iterator findFlightByID(const string&) const;
-    vector<Flight*> findFlightByDate(const string&) const;
-    vector<Flight*> findFlightByDestination(const string&) const;
+    vector<Flight*>::iterator findFlightByID(const string&);
+    vector<Flight*> findFlightByDate(const string&);
+    vector<Flight*> findFlightByDestination(const string&);
+    vector<int> getAvailableSeat(const string&);
+    vector<Flight*> findFlightQuantityOfAirplane(const string&);
 
-    vector<int> getAvailableSeats(const string&) const;
-    vector<Flight*>& getAllFlight() const;
+    int countFlightOfOneAirplane(const string&);
+    vector<int> getSeats(const string&);
+    vector<Flight*>& getAllFlight();
 };
 
 

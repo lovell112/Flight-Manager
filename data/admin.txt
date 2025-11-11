@@ -1,2 +1,0 @@
-adminaccount|adminpassword
-xuansonadmin|sonadmin123

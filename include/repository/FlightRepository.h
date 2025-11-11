@@ -24,6 +24,7 @@ public:
     vector<Flight*>::iterator findByID(const string&);
     vector<Flight*> findByDate(const string&);
     vector<Flight*> findByDestination(const string&);
+    vector<Flight*> findByAirplane(const string&);
 
     [[nodiscard]] vector<Flight*>::iterator undefineFlight();
 

@@ -6,7 +6,6 @@ AuthService::AuthService() {
 }
 
 AuthService::~AuthService() {
-    cout << "delete thanh cong auth\n";
     delete m_adminRepository; // delete repo
 }
 

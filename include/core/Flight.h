@@ -40,7 +40,7 @@ public:
     [[nodiscard]] const string& getAirplaneID() const;
     [[nodiscard]] const string& getDestinationAirport() const;
     [[nodiscard]] const DateTime& getDepartureDate() const;
-    [[nodiscard]] FlightStatus getStatus() const;
+    [[nodiscard]] const FlightStatus& getStatus() const;
     vector<string>& getTickets();
 
     void setFlightID(const string&);

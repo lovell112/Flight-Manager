@@ -13,7 +13,7 @@ class Airplane {
 public:
     //  Constructor / Destructor
     Airplane();
-    Airplane(const string&, int);
+    Airplane(const string&, const vector<bool>&);
     ~Airplane();
 
     //  Getter
@@ -23,9 +23,12 @@ public:
 
     //  Setter
     void setSeatCount(int);
+    void bookSeat(int);
+    void cancelSeat(int);
 
     //  Logic
     [[nodiscard]] string toString() const;
+    [[nodiscard]] bool isSeatAvailable(int) const;
     void printAirplaneInfo() const;
 };
 

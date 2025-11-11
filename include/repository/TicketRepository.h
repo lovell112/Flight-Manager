@@ -21,6 +21,7 @@ public:
     void add(const Ticket&);
     void remove(const string&);
     vector<Ticket*>::iterator findByID(const string&);
+    vector<Ticket*> findByFlightID(const string&);
     vector<Ticket*>& getAll();
     const vector<Ticket*>::iterator undefineTicket();
     void loadAllTickets();
