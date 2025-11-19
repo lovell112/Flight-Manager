@@ -17,7 +17,7 @@ public:
     void saveAllAdmins() const;
     vector<Admin*>::iterator getValidateAdmin(const string&, const string&);
     vector<Admin*>::iterator begin();
-    vector<Admin*>::iterator invalidAdmin();
+    vector<Admin*>::iterator undefineAdmin();
 };
 
 

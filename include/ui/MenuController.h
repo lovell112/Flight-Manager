@@ -14,6 +14,8 @@ class MenuController {
     FlightManager* m_flightManager;
     TicketManager* m_ticketManager;
 
+    // const int
+
     void mainMenu();
     void airplaneListMenu();
     void bookTicketMenu();
@@ -26,6 +28,9 @@ class MenuController {
     void handleTicketBooking();
     void handleTicketCancelation();
     void showStatistics();
+    void displayLoginLogo();
+    string inputHiddenPassword();
+    void showLogin();
 public:
     MenuController();
     ~MenuController();

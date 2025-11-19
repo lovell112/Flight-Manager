@@ -1,5 +1,10 @@
 #include "../../include/ui/MenuController.h"
 #include <iomanip>
+#include <conio.h>
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
+#define _HAS_STD_BYTE 0
+#include <windows.h>
 
 MenuController::MenuController() {
     m_customerService = new CustomerService();
@@ -31,6 +36,7 @@ void MenuController::airplaneListMenu() {
     const int statusWidth = 12;
     const int ticketWidth = 20;
 
+    system("cls");
     cout<< left
         << setw(flightIDWidth) << "Flight ID"
         << setw(departureWidth) << "Departure date"
@@ -396,9 +402,66 @@ void MenuController::showStatistics() {
                 showFlightQuantityOfAirplane(airplaneID);
                 break;
             }
-
         }
     } while (option != 0);
+}
+
+void MenuController::displayLoginLogo() {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+    cout<< left
+        << string(30, ' ') << "***********************************\n"
+        << string(30, ' ') << "*      DANG  NHAP  HE  THONG      *\n"
+        << string(30, ' ') << "***********************************\n\n";
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+}
+
+string MenuController::inputHiddenPassword() {
+    string password;
+    char ch;
+
+    while ((ch = _getch()) != '\r') { // '\r' = Enter
+        if (ch == '\b') { // Xử lý Backspace
+            if (!password.empty()) {
+                // sleep(1000);
+                cout << "\b \b";
+                password.pop_back();
+            }
+        } else {
+            password.push_back(ch);
+            cout << '*'; // Hiển thị dấu *
+        }
+    }
+    cout << endl;
+    return password;
+}
+
+void MenuController::showLogin() {
+    string username;
+    int count = 0;
+    while (count < 3) {
+        system("cls");
+        displayLoginLogo();
+        cout << string(33, ' ') << ">>>> Username: ";
+        cin >> username;
+        cout << string(33, ' ') << ">>>> Password: ";
+        string password = inputHiddenPassword();
+
+        cout << m_authService->tryLogin(username, password) << endl;
+        if (m_authService->tryLogin(username, password)) {
+            manageMenu();
+            return;
+        }
+
+        cout << "Tai khoan khong hop le!\n";
+        count++;
+        cout << "(Enter)";
+        cin.ignore();
+        cin.get();
+    }
+
+    cout << "Ban da nhap sai qua 3 lan, chung toi se thoat he thong!\n";
+    cout << "(Enter de thoat khoi he thong!!!)";
+    cin.get();
 }
 
 void MenuController::run() {
@@ -414,7 +477,7 @@ void MenuController::run() {
                 bookTicketMenu();
                 break;
             case 3:
-                manageMenu();
+                showLogin();
                 break;
         }
     } while (option != 0);

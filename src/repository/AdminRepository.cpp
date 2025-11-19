@@ -70,7 +70,7 @@ vector<Admin*>::iterator AdminRepository::getValidateAdmin(const string &usernam
             return admin;
     }
 
-    return m_admins.end();
+    return undefineAdmin();
 }
 
 vector<Admin *>::iterator AdminRepository::begin() {
@@ -78,7 +78,7 @@ vector<Admin *>::iterator AdminRepository::begin() {
     return m_admins.begin();
 }
 
-vector<Admin *>::iterator AdminRepository::invalidAdmin() {
+vector<Admin *>::iterator AdminRepository::undefineAdmin() {
     loadAllAdmins();
     return m_admins.end();
 }

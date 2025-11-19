@@ -101,7 +101,7 @@ vector<Ticket*> TicketManager::findByDestination(const string& destination) {
 }
 
 vector<Ticket *> TicketManager::findByFlightID(const string &flightID) {
-    m_ticketRepository->findByFlightID(flightID);
+    return m_ticketRepository->findByFlightID(flightID);
 }
 
 
