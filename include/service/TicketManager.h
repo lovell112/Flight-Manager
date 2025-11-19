@@ -20,7 +20,7 @@ class TicketManager {
 public:
     TicketManager();
     ~TicketManager();
-    void addTicket(const Ticket&);
+    void addTicketFromQueue();
     void removeTicket(const string&);
     vector<Ticket*> findByDate(const string&);
     vector<Ticket*>::iterator findByID(const string&);

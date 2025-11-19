@@ -70,7 +70,7 @@ bool CustomerService::tryBookTicket(const string& flightID, const string& custom
 
     m_customerRepository->add(Customer(customerNumber, customerFullname, customerID));
 
-    cout << (*m_ticketQueueRepository->findByID(ticketID))->toString() << endl;
+    // cout << (*m_ticketQueueRepository->findByID(ticketID))->toString() << endl;
     cout << "Dat ve thanh cong cho khach: " << customerFullname << endl;
     return true;
 }

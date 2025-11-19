@@ -17,19 +17,22 @@ class MenuController {
     // const int
 
     void mainMenu();
-    void airplaneListMenu();
+    void flightListMenu();
     void bookTicketMenu();
     void manageMenu();
     void showAllTicketQueue();
     void showAllTicket();
     void showTicketByFlightID(const string&);
-    void showAvailableSeatOfFlight(const string&);
+    void showAvailableSeatOfFlight(const string&) const;
     void showFlightQuantityOfAirplane(const string&);
     void handleTicketBooking();
     void handleTicketCancelation();
     void showStatistics();
-    void displayLoginLogo();
-    string inputHiddenPassword();
+
+    static void displayLoginLogo();
+
+    static string inputHiddenPassword();
+    static string input();
     void showLogin();
 public:
     MenuController();

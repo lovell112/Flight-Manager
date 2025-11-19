@@ -53,8 +53,7 @@ vector<Ticket*>::iterator TicketRepository::findByID(const string& id) {
     return undefineTicket(); // khong tim thay thi return
 }
 
-vector<Ticket *> TicketRepository::findByFlightID(const string &flightID) {
-    loadAllTickets();
+vector<Ticket *> TicketRepository::findByFlightID(const string &flightID) const {
     vector<Ticket*> res;
     for (auto ticket : m_tickets) {
         if (ticket->getFlightID() == flightID)
@@ -134,4 +133,3 @@ void TicketRepository::saveAllTickets() {
         writer.close();
     }
 }
-

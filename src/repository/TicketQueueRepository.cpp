@@ -27,6 +27,7 @@ void TicketQueueRepository::pop() {
     if (m_tickets.empty())
         return;
 
+    delete m_tickets.front();
     m_tickets.pop();
     saveAllTickets();
     loadAllTickets();
@@ -43,6 +44,19 @@ Ticket * TicketQueueRepository::front() {
 queue<Ticket *> &TicketQueueRepository::getAll() {
     loadAllTickets();
     return m_tickets;
+}
+
+vector<Ticket *> TicketQueueRepository::getList() {
+    loadAllTickets();
+
+    vector<Ticket*> res;
+    auto temp = m_tickets;
+    while (!temp.empty()) {
+        res.push_back(temp.front());
+        temp.pop();
+    }
+
+    return res;
 }
 
 const Ticket* TicketQueueRepository::undefineTicket() {
@@ -79,7 +93,7 @@ void TicketQueueRepository::loadAllTickets() {
     reader.close();
 }
 
-void TicketQueueRepository::saveAllTickets() const {
+void TicketQueueRepository::saveAllTickets() {
     ofstream writer(PATH);
 
     if (!writer.is_open()) {
@@ -87,12 +101,11 @@ void TicketQueueRepository::saveAllTickets() const {
         return;
     }
 
-    queue<Ticket*> temp;
+    queue<Ticket*> temp = m_tickets;
 
-    while (!m_tickets.empty()) {
-        writer << m_tickets.front()->toString() << endl;
-        temp.push(m_tickets.front());
-        m_tickets.pop()
+    while (!temp.empty()) {
+        writer << temp.front()->toString() << endl;
+        temp.pop();
     }
 
     writer.close();

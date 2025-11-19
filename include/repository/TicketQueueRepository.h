@@ -17,9 +17,11 @@ public:
     [[nodiscard]] Ticket* front();
     queue<Ticket*>& getAll();
 
+    vector<Ticket *> getList();
+
     static const Ticket* undefineTicket();
     void loadAllTickets();
-    void saveAllTickets() const;
+    void saveAllTickets();
 };
 
 

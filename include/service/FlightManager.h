@@ -20,6 +20,7 @@ class FlightManager {
 public:
     FlightManager();
     FlightManager(FlightRepository*, TicketRepository*, AirplaneRepository*, CustomerRepository*);
+
     ~FlightManager();
     void addFlight(const Flight&);
     void cancelFlight(const string&);

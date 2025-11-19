@@ -32,35 +32,35 @@ TicketManager::~TicketManager() {
     delete m_customerRepository;
 }
 
-void TicketManager::addTicket(const Ticket &ticket) {
-    m_ticketRepository->add(ticket);
+void TicketManager::addTicketFromQueue() {
+    m_ticketRepository->add(*m_ticketQueueRepository->front());
 
-    auto flight = m_flightRepository->findByID(ticket.getFlightID());
-    auto airplane = m_airplaneRepository->findByID((*flight)->getAirplaneID());
-    (*flight)->addTicket(ticket.getTicketID());
-    (*airplane)->bookSeat(ticket.getSeatNumber());
+    const auto flight = m_flightRepository->findByID(m_ticketQueueRepository->front()->getFlightID());
+    const auto airplane = m_airplaneRepository->findByID((*flight)->getAirplaneID());
+    (*flight)->addTicket(m_ticketQueueRepository->front()->getTicketID());
+    (*airplane)->bookSeat(m_ticketQueueRepository->front()->getSeatNumber());
 
-    m_ticketQueueRepository->remove(ticket.getTicketID()); // delete ve khoi hang doi
-    m_customerRepository->remove(ticket.getCustomerID()); // delete khoi hang doi khach cho mua
+    m_ticketQueueRepository->pop(); // delete ve khoi hang doi
+    // m_customerRepository->remove(ticket.getCustomerID()); // delete khoi hang doi khach cho mua
 
     saveData();
     loadData();
 }
 
 void TicketManager::removeTicket(const string &ticketID) {
-    auto ticket = m_ticketRepository->findByID(ticketID);
+    const auto ticket = m_ticketRepository->findByID(ticketID);
     if (ticket == m_ticketRepository->undefineTicket()) {
         cout << "Khong ton tai ve : " << ticketID << endl;
         return;
     }
 
-    auto flight = m_flightRepository->findByID((*ticket)->getFlightID());
+    const auto flight = m_flightRepository->findByID((*ticket)->getFlightID());
     if ((*flight)->getStatus() == FlightStatus::COMPLETED) {
         cout << "Chuyen bay " << (*flight)->getFlightID() << " da hoan tat, khong the tra ve\n";
         return;
     }
 
-    auto airplane = m_airplaneRepository->findByID((*flight)->getAirplaneID());
+    const auto airplane = m_airplaneRepository->findByID((*flight)->getAirplaneID());
     m_ticketRepository->remove(ticketID);
     (*flight)->removeTicket(ticketID);
     (*airplane)->cancelSeat((*ticket)->getSeatNumber());

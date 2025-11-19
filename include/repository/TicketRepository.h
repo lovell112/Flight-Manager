@@ -2,8 +2,8 @@
 // Created by HP on 05/11/2025.
 //
 
-#ifndef FLIGHTMANAGER_FLÌGHTREPOSITORY_H
-#define FLIGHTMANAGER_FLÌGHTREPOSITORY_H
+#ifndef FLIGHTMANAGER_TICKETREPOSITORY_H
+#define FLIGHTMANAGER_TICKETREPOSITORY_H
 #include "../core/Ticket.h"
 #include <string>
 #include <fstream>
@@ -21,7 +21,7 @@ public:
     void add(const Ticket&);
     void remove(const string&);
     vector<Ticket*>::iterator findByID(const string&);
-    vector<Ticket*> findByFlightID(const string&);
+    [[nodiscard]] vector<Ticket*> findByFlightID(const string&) const;
     vector<Ticket*>& getAll();
     const vector<Ticket*>::iterator undefineTicket();
     void loadAllTickets();
@@ -29,4 +29,4 @@ public:
 };
 
 
-#endif //FLIGHTMANAGER_FLÌGHTREPOSITORY_H
+#endif //FLIGHTMANAGER_TICKETREPOSITORY_H

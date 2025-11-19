@@ -8,6 +8,7 @@
 #include "../repository/FlightRepository.h"
 #include "../repository/TicketQueueRepository.h"
 #include "../repository/TicketRepository.h"
+class TicketRepository;
 using namespace std;
 
 class CustomerService {
