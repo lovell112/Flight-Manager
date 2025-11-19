@@ -1,22 +1,23 @@
 #ifndef FLIGHTMANAGER_TICKETQUEUE_H
 #define FLIGHTMANAGER_TICKETQUEUE_H
+#include <queue>
+
 #include "../core/Ticket.h"
 #include <vector>
 using namespace std;
 
 class TicketQueueRepository {
-    vector<Ticket*> m_tickets;
+    queue<Ticket*> m_tickets;
     const string PATH = "../data/ticket_queue.txt";
 public:
     TicketQueueRepository();
     ~TicketQueueRepository();
-    void add(const Ticket&);
-    void remove(const string&);
+    void push(const Ticket&);
     void pop();
-    vector<Ticket*>::iterator front();
-    vector<Ticket*>::iterator findByID(const string&);
-    vector<Ticket*>& getAll();
-    const vector<Ticket*>::iterator undefineTicket();
+    [[nodiscard]] Ticket* front();
+    queue<Ticket*>& getAll();
+
+    static const Ticket* undefineTicket();
     void loadAllTickets();
     void saveAllTickets() const;
 };

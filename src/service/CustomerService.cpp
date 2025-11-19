@@ -64,7 +64,7 @@ bool CustomerService::tryBookTicket(const string& flightID, const string& custom
 
     // tao ve moi va them vao hang doi de duyet
     const string ticketID = flightID + "-" + to_string(seatNumber);
-    m_ticketQueueRepository->add(Ticket(ticketID, flightID, customerID, customerFullname, seatNumber));
+    m_ticketQueueRepository->push(Ticket(ticketID, flightID, customerID, customerFullname, seatNumber));
 
     int customerNumber = m_customerRepository->getAll().size() == 0 ? 0 : m_customerRepository->getAll().size();
 

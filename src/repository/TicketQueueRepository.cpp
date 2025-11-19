@@ -9,26 +9,15 @@ TicketQueueRepository::TicketQueueRepository() {
 TicketQueueRepository::~TicketQueueRepository() {
     loadAllTickets(); // cap nhat du lieu moi nhat
     saveAllTickets(); // auto save
-    for (auto& ticket : m_tickets) {
-        delete ticket;
+    while (!m_tickets.empty()) {
+        delete m_tickets.front();
+        m_tickets.pop();
     }
-    m_tickets.clear();
 }
 
-void TicketQueueRepository::add(const Ticket &ticket) {
+void TicketQueueRepository::push(const Ticket &ticket) {
     loadAllTickets();
-    m_tickets.push_back(new Ticket(ticket));
-    saveAllTickets();
-    loadAllTickets();
-}
-
-void TicketQueueRepository::remove(const string &ticketID) {
-    loadAllTickets();
-    auto ticket = findByID(ticketID);
-    if (ticket == undefineTicket())
-        return;
-    delete *ticket;
-    m_tickets.erase(ticket);
+    m_tickets.push(new Ticket(ticket));
     saveAllTickets();
     loadAllTickets();
 }
@@ -38,29 +27,26 @@ void TicketQueueRepository::pop() {
     if (m_tickets.empty())
         return;
 
-    m_tickets.erase(m_tickets.end()-1);
+    m_tickets.pop();
     saveAllTickets();
     loadAllTickets();
 }
 
-
-vector<Ticket *>::iterator TicketQueueRepository::findByID(const string &ticketID) {
+Ticket * TicketQueueRepository::front() {
     loadAllTickets();
-    for (auto ticket = m_tickets.begin(); ticket != m_tickets.end(); ticket++) {
-        if ((*ticket)->getTicketID() == ticketID)
-            return ticket;
-    }
-    return undefineTicket();
+    if (m_tickets.empty())
+        return nullptr;
+
+    return m_tickets.front();
 }
 
-vector<Ticket *> &TicketQueueRepository::getAll() {
+queue<Ticket *> &TicketQueueRepository::getAll() {
     loadAllTickets();
     return m_tickets;
 }
 
-const vector<Ticket *>::iterator TicketQueueRepository::undefineTicket() {
-    loadAllTickets();
-    return m_tickets.end();
+const Ticket* TicketQueueRepository::undefineTicket() {
+    return nullptr;
 }
 
 void TicketQueueRepository::loadAllTickets() {
@@ -70,9 +56,10 @@ void TicketQueueRepository::loadAllTickets() {
         return;
     }
 
-    for (auto& ticket : m_tickets)
-        delete ticket;
-    m_tickets.clear();
+    while (!m_tickets.empty()) {
+        delete m_tickets.front();
+        m_tickets.pop();
+    }
 
     string line;
     while (getline(reader, line)) {
@@ -87,7 +74,7 @@ void TicketQueueRepository::loadAllTickets() {
         getline(spliter, customerFullname, '|');
         getline(spliter, seatNumberString, '|');
 
-        m_tickets.push_back(new Ticket(ticketID, flightID, customerID, customerFullname, stoi(seatNumberString)));
+        m_tickets.push(new Ticket(ticketID, flightID, customerID, customerFullname, stoi(seatNumberString)));
     }
     reader.close();
 }
@@ -100,8 +87,13 @@ void TicketQueueRepository::saveAllTickets() const {
         return;
     }
 
-    for (auto& ticket : m_tickets)
-        writer << ticket->toString() << endl;
+    queue<Ticket*> temp;
+
+    while (!m_tickets.empty()) {
+        writer << m_tickets.front()->toString() << endl;
+        temp.push(m_tickets.front());
+        m_tickets.pop()
+    }
 
     writer.close();
 }
