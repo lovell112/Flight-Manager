@@ -29,13 +29,30 @@ class Queue {
 public:
     Queue() : m_front(nullptr), m_back(nullptr), m_size(0) {}
 
-    //Cấm copy constructor để tránh copy nông → double free
-    Queue(const Queue& other) = delete;
+    // Copy constructor
+Queue(const Queue& other) : m_front(nullptr), m_back(nullptr), m_size(0) {
+    Node<T>* cur = other.m_front;
+    while (cur) {
+        push(cur->m_data);
+        cur = cur->m_next;
+    }
+}
 
-    /*Cấm operator= để tránh
-        Xóa một queue sẽ phá queue còn lại (double delete).
-        Thay đổi dữ liệu ở queue này sẽ ảnh hưởng queue kia. */
-    Queue& operator = (const Queue& other) = delete;
+  // Operator=
+Queue& operator=(const Queue& other) {
+    if (this == &other)
+        return *this;
+
+    clear();
+
+    Node<T>* cur = other.m_front;
+    while (cur) {
+        push(cur->m_data);
+        cur = cur->m_next;
+    }
+
+    return *this;
+}
 
     // giai phong toan bo node khi huy Queue
     ~Queue() {
