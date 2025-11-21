@@ -5,6 +5,9 @@
 #include <stdexcept>
 
 template <typename T>
+class Queue;
+
+template <typename T>
 class Node {
     T m_data;          // du lieu cua node
     Node* m_next;      // con tro den node tiep theo
@@ -25,6 +28,14 @@ class Queue {
 
 public:
     Queue() : m_front(nullptr), m_back(nullptr), m_size(0) {}
+
+    //Cấm copy constructor để tránh copy nông → double free
+    Queue(const Queue& other) = delete;
+
+    /*Cấm operator= để tránh
+        Xóa một queue sẽ phá queue còn lại (double delete).
+        Thay đổi dữ liệu ở queue này sẽ ảnh hưởng queue kia. */
+    Queue& operator = (const Queue& other) = delete;
 
     // giai phong toan bo node khi huy Queue
     ~Queue() {
