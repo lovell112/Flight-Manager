@@ -19,7 +19,7 @@ public:
     // getter
     [[nodiscard]] const string& getCustomerID() const;
     [[nodiscard]] const string& getFullName() const;
-    [[nodiscard]] const int getNumber() const;
+    [[nodiscard]] int getNumber() const;
 
     // setter
     void setNumber(int);
@@ -27,7 +27,7 @@ public:
     void setCustomerID(const string&);
 
     // dinh dang obj -> string
-    [[nodiscard]] const string toString() const;
+    [[nodiscard]] string toString() const;
 
     // in 
     void printCustomerInfo() const;

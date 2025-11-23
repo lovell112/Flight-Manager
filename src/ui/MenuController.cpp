@@ -6,6 +6,7 @@
 #define _HAS_STD_BYTE 0
 #include <windows.h>
 
+string MenuController::ESCAPE = "VK_ESCAPE";
 MenuController::MenuController() {
     m_customerService = new CustomerService();
     m_authService = new AuthService();
@@ -38,7 +39,7 @@ void MenuController::mainMenu() {
     cout << "Moi ban nhap lua chon: ";
 }
 
-void MenuController::flightListMenu() {
+void MenuController::flightListMenu() const {
     const int flightIDWidth = 12;
     const int departureWidth = 20;
     const int destWidth = 16;
@@ -62,7 +63,7 @@ void MenuController::flightListMenu() {
         << endl;
     cout<< string(flightIDWidth + departureWidth + destWidth + statusWidth + ticketWidth, '-') << endl;
 
-    for (auto& flight : m_flightManager->getAllFlight()) {
+    for (const auto& flight : m_flightManager->getAllFlight()) {
         string status;
         switch (flight->getStatus()) {
             case FlightStatus::CANCELLED:
@@ -101,7 +102,7 @@ void MenuController::flightListMenu() {
     cin.get();
 }
 
-void MenuController::bookTicketMenu() {
+void MenuController::bookTicketMenu() const {
     system("cls");
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
     cout << string(20, ' ') << "*****************************************\n";
@@ -110,38 +111,62 @@ void MenuController::bookTicketMenu() {
     cout << string(20, ' ') << "*****************************************\n";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 
-    string customerID, customerFullname, flightID;
-    int seatNumber;
     cout << string(20, ' ') << "Vui long dien day du cac thong tin sau:\n";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
     cout << string(20, ' ') << ">>>> ";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    cout << "CCCD: "; cin >> customerID;
-    cin.ignore();
+    cout << "CCCD: ";
+    const string customerID = input();
+    if (customerID == ESCAPE)
+        return;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
     cout << string(20, ' ') << ">>>> ";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    cout << "Ho ten: "; getline(cin, customerFullname);
+    cout << "Ho ten: ";
+    const string customerFullname = input();
+    if (customerFullname == ESCAPE)
+        return;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
     cout << string(20, ' ') << ">>>> ";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    cout << "Ma chuyen bay: "; cin >> flightID;
+    cout << "Ma chuyen bay: ";
+    const string flightID = input();
+    if (flightID == ESCAPE)
+        return;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
     cout << string(20, ' ') << ">>>> ";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    cout << "So ghe: "; cin >> seatNumber;
+    cout << "So ghe: ";
+    int seatNumber;
+    try {
+        const auto temp = input();
+        if (temp == ESCAPE)
+            return;
+        seatNumber = stoi(temp);
+    } catch (exception e) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+        cout << string(20, ' ') << "Thong tin khong hop le, vui long kiem tra lai!\n";
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+        cout << string(20, ' ') << "(Enter)";
+        cin.ignore();
+        cin.get();
+        return;
+    }
+
     if (!m_customerService->tryBookTicket(flightID, customerID, customerFullname, seatNumber)) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
-        cout << "Thong tin khong hop le, vui long kiem tra lai!\n";
+        cout << string(20, ' ') << "Thong tin khong hop le, vui long kiem tra lai!\n";
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+    } else {
+
     }
-    cout << "(Enter)";
+    cout << string(20, ' ') << "(Enter)";
     cin.ignore();
     cin.get();
 }
 
-void MenuController::manageMenu() {
-    int option;
+void MenuController::manageMenu() const {
+    int option = 0;
 
     do {
         system("cls");
@@ -159,7 +184,22 @@ void MenuController::manageMenu() {
         cout << string(20, ' ') << ">>>> ";
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
         cout << "Xin nhap lua chon cua ban: ";
-        cin >> option;
+
+        auto tempInput = input();
+        if (tempInput == ESCAPE)
+            return;
+
+        try {
+            option = stoi(tempInput);
+        } catch (exception e) {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+            cout << "Vui long nhap so!\n";
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+            cout << "(Enter)";
+            cin.ignore();
+            cin.get();
+            continue;
+        }
 
         switch (option) {
             case 1:
@@ -171,11 +211,12 @@ void MenuController::manageMenu() {
             case 3:
                 showStatistics();
                 break;
+            default: ;
         }
     } while (option != 0);
 }
 
-void MenuController::showAllTicketQueue() {
+void MenuController::showAllTicketQueue() const {
     const int ticketIDWidth = 10, flightIDWidth = 20, customerIDWidth = 20, customerNameWidth = 20, seatNumberWidth = 10;
 
     system("cls");
@@ -219,7 +260,7 @@ void MenuController::showAllTicketQueue() {
     cout << endl;
 }
 
-void MenuController::showAllTicket() {
+void MenuController::showAllTicket() const {
     const int ticketIDWidth = 10, flightIDWidth = 20, customerIDWidth = 20, customerNameWidth = 20, seatNumberWidth = 10;
 
     system("cls");
@@ -263,8 +304,18 @@ void MenuController::showAllTicket() {
     cout << endl;
 }
 
-void MenuController::showTicketByFlightID(const string& flightID) {
-    auto tickets = m_ticketManager->findByFlightID(flightID);
+void MenuController::showTicketByFlightID(const string& flightID) const {
+    const auto flight = m_flightManager->findFlightByID(flightID);
+    if (flight == m_flightManager->getFlightRepository().undefineFlight()) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+        cout << string(20, ' ') << "Khong ton tai chuyen bay " << flightID << "!" << endl;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+        cout << string(20, ' ') << "(Enter)";
+        cin.ignore();
+        cin.get();
+        return;
+    }
+    const auto tickets = m_ticketManager->findByFlightID(flightID);
     system("cls");
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 5);
@@ -320,7 +371,16 @@ void MenuController::showAvailableSeatOfFlight(const string &flightID) const {
     cout << string(20, ' ') << "*****************************************\n\n";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 
-    auto seats = m_flightManager->getAvailableSeat(flightID);
+    const auto flight = m_flightManager->findFlightByID(flightID);
+    if (flight == m_flightManager->getFlightRepository().undefineFlight()) {
+        cout << string(20, ' ') << "Khong ton tai chuyen bay co ID: " << flightID << endl;
+        cout << string(20, ' ') << "(Enter)";
+        cin.ignore();
+        cin.get();
+        return;
+    }
+
+    const auto seats = m_flightManager->getAvailableSeat(flightID);
     if (seats.empty()) {
         cout << string(20, ' ') << "Chuyen bay da het cho trong\n";
         cout << string(20, ' ') << "(Enter)";
@@ -330,7 +390,7 @@ void MenuController::showAvailableSeatOfFlight(const string &flightID) const {
     }
 
     cout << string(20, ' ') << "DANH SACH GHE TRONG CUA CHUYEN BAY: " << flightID << " la: " << seats.size() << endl;
-    for (auto i : seats)
+    for (const auto i : seats)
         cout << string(20, ' ') << "[Ghe thu " << i << "]\n";
 
     cout << string(20, ' ') << "(Enter)";
@@ -338,7 +398,7 @@ void MenuController::showAvailableSeatOfFlight(const string &flightID) const {
     cin.get();
 }
 
-void MenuController::showFlightQuantityOfAirplane(const string &airplaneID) {
+void MenuController::showFlightQuantityOfAirplane(const string &airplaneID) const {
     system("cls");
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 5);
@@ -348,7 +408,17 @@ void MenuController::showFlightQuantityOfAirplane(const string &airplaneID) {
     cout << string(20, ' ') << "*****************************************\n\n";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 
-    auto flights = m_flightManager->findFlightQuantityOfAirplane(airplaneID);
+    const auto flights = m_flightManager->findFlightQuantityOfAirplane(airplaneID);
+    const auto airplane = m_flightManager->getAirplaneRepository().findByID(airplaneID);
+    if (airplane == m_flightManager->getAirplaneRepository().undefineAirplane()) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+        cout << "Khong ton tai may bay " << airplaneID << "!" << endl;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+        cout << string(20, ' ') << "(Enter)";
+        cin.ignore();
+        cin.get();
+        return;
+    }
     if (flights.empty()) {
         cout << string(20, ' ') << "May bay " << airplaneID << " khong co chuyen bay nao\n";
         cout << string(20, ' ') << "(Enter)";
@@ -363,7 +433,7 @@ void MenuController::showFlightQuantityOfAirplane(const string &airplaneID) {
     const int statusWidth = 12;
     const int ticketWidth = 20;
 
-    cout << "CAC CHUYEN BAY CUA MAY BAY " << airplaneID << endl;
+    cout << string(20, ' ') << "CAC CHUYEN BAY CUA MAY BAY " << airplaneID << endl;
     cout<< string(flightIDWidth + departureWidth + destWidth + statusWidth + ticketWidth, '-') << endl;
     cout<< left
         << setw(flightIDWidth) << "Flight ID"
@@ -374,7 +444,7 @@ void MenuController::showFlightQuantityOfAirplane(const string &airplaneID) {
         << endl;
     cout<< string(flightIDWidth + departureWidth + destWidth + statusWidth + ticketWidth, '-') << endl;
 
-    for (auto flight : flights) {
+    for (const auto flight : flights) {
         string status;
         switch (flight->getStatus()) {
             case FlightStatus::CANCELLED:
@@ -413,8 +483,8 @@ void MenuController::showFlightQuantityOfAirplane(const string &airplaneID) {
     cin.get();
 }
 
-void MenuController::handleTicketBooking() {
-    int option;
+void MenuController::handleTicketBooking() const {
+    int option = 0;
     do {
         showAllTicketQueue();
 
@@ -425,7 +495,24 @@ void MenuController::handleTicketBooking() {
         cout << string(20, ' ') << ">>>> ";
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
         cout << "Nhap lua chon: ";
-        cin >> option;
+        auto tempInput = input();
+
+        // neu user nhan esc thi thoat
+        if (tempInput == ESCAPE)
+            return;
+
+        // kiem tra thong tin user nhap co hop le???
+        try {
+            option = stoi(tempInput);
+        } catch (exception e) {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+            cout << string(20, ' ') << "Vui long nhap so!\n";
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+            cout << string(20, ' ') << "(Enter)";
+            cin.ignore();
+            cin.get();
+            continue;
+        }
 
         if (option != 1 && option != 2 && option != 0)
             return;
@@ -433,21 +520,49 @@ void MenuController::handleTicketBooking() {
         if (option == 0)
             continue;
 
-        string ticketID = m_ticketManager->getTicketQueueRepository().front()->getTicketID();
-        m_ticketManager->getTicketQueueRepository().pop();
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
-        cout << string(20, ' ') << "Da chap nhan ve : " << ticketID << endl;
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+        switch (option) {
+            case 1: {
+                const auto ticket = m_ticketManager->getTicketQueueRepository().front();
+                if (ticket == m_ticketManager->getTicketQueueRepository().undefineTicket()) {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+                    cout << string(20, ' ') << "Chua co ve nao duoc dat!\n";
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                } else {
+                    const string ticketID = ticket->getTicketID();
+                    m_ticketManager->addTicketFromQueue();
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+                    cout << string(20, ' ') << "Da chap nhan ve : " << ticketID << endl;
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                }
+                break;
+            }
+            case 2: {
+                const auto ticket = m_ticketManager->getTicketQueueRepository().front();
+                if (ticket == m_ticketManager->getTicketQueueRepository().undefineTicket()) {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+                    cout << string(20, ' ') << "Chua co ve nao duoc dat!\n";
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                } else {
+                    const string ticketID = ticket->getTicketID();
+                    m_ticketManager->getTicketQueueRepository().pop();
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+                    cout << string(20, ' ') << "Da xoa ve : " << ticketID << endl;
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                }
+                break;
+            }
+            default: {}
+        }
+
         cout << string(20, ' ') << "(Enter)";
         cin.ignore();
         cin.get();
-
     } while (option != 0);
 }
 
-void MenuController::handleTicketCancelation() {
+void MenuController::handleTicketCancelation() const {
 
-    int option;
+    int option = 0;
 
     do {
         showAllTicket();
@@ -457,7 +572,22 @@ void MenuController::handleTicketCancelation() {
         cout << string(20, ' ') << ">>>> ";
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
         cout << "Nhap lua chon: ";
-        cin >> option;
+
+        auto tempInput = input();
+        if (tempInput == ESCAPE)
+            return;
+
+        try {
+            option = stoi(tempInput);
+        } catch (exception e) {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+            cout << string(20, ' ') << "Vui long nhap so!\n";
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+            cout << string(20, ' ') << "(Enter)";
+            cin.ignore();
+            cin.get();
+            continue;
+        }
 
         if (option == 0)
             continue;
@@ -467,21 +597,29 @@ void MenuController::handleTicketCancelation() {
         cout << string(20, ' ') << ">>>> ";
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
         cout << "Nhap ma ve: ";
-        string ticketID;
-        cin >> ticketID;
-        auto ticket = m_ticketManager->findByID(ticketID);
-        m_ticketManager->removeTicket((*ticket)->getTicketID());
-        cout << string(20, ' ') << "Da xoa ve : " << ticketID << endl;
+        const string ticketID = input();
+        if (ticketID == ESCAPE)
+            return;
+        const auto ticket = m_ticketManager->findByID(ticketID);
+        if (ticket == m_ticketManager->getTicketRepository().undefineTicket()) {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+            cout << string(20, ' ') << "Khong tim thay ve " << ticketID << "!\n";
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+        } else {
+            m_ticketManager->removeTicket(ticketID);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+            cout << string(20, ' ') << "Da xoa ve : " << ticketID << endl;
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+        }
         cout << string(20, ' ') << "(Enter)";
         cin.ignore();
-
         cin.get();
     } while (option != 0);
 }
 
-void MenuController::showStatistics() {
+void MenuController::showStatistics() const {
 
-    int option;
+    int option = 0;
     do {
         system("cls");
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 5);
@@ -499,7 +637,22 @@ void MenuController::showStatistics() {
         cout << string(20, ' ') << ">>>> ";
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
         cout << "Nhap lua chon: ";
-        cin >> option;
+
+        auto tempInput = input();
+        if (tempInput == ESCAPE)
+            return;
+
+        try {
+            option = stoi(tempInput);
+        } catch (exception e) {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+            cout << string(20, ' ') << "Vui long nhap so!\n";
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+            cout << string(20, ' ') << "(Enter)";
+            cin.ignore();
+            cin.get();
+            continue;
+        }
 
         if (option == 0)
             continue;
@@ -510,8 +663,10 @@ void MenuController::showStatistics() {
                 cout << string(20, ' ') << ">>>> ";
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
                 cout << "Nhap vao ma chuyen bay: ";
-                string flightID;
-                cin >> flightID;
+                const string flightID = input();
+                if (flightID == ESCAPE)
+                    return;
+
                 showTicketByFlightID(flightID);
                 break;
             }
@@ -520,8 +675,10 @@ void MenuController::showStatistics() {
                 cout << string(20, ' ') << ">>>> ";
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
                 cout << "Nhap vao ma chuyen bay: ";
-                string flightID;
-                cin >> flightID;
+                const string flightID = input();
+                if (flightID == ESCAPE)
+                    return;
+
                 showAvailableSeatOfFlight(flightID);
                 break;
             }
@@ -530,11 +687,23 @@ void MenuController::showStatistics() {
                 cout << string(20, ' ') << ">>>> ";
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
                 cout << "Nhap vao ma may bay: ";
-                string airplaneID;
-                cin >> airplaneID;
+                const string airplaneID = input();
+                if (airplaneID == ESCAPE)
+                    return;
+                if (airplaneID.empty()) {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+                    cout << string(20, ' ') << "Ban chua nhap ma chuyen bay!\n";
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                    cout << string(20, ' ') << "(Enter)";
+                    cin.ignore();
+                    cin.get();
+                    continue;
+                }
+
                 showFlightQuantityOfAirplane(airplaneID);
                 break;
             }
+            default: ;
         }
     } while (option != 0);
 }
@@ -554,7 +723,7 @@ string MenuController::inputHiddenPassword() {
 
     while ((ch = _getch()) != '\r') { // '\r' = Enter
         if (ch == 27)
-            return "VK_ESCAPE";
+            return ESCAPE;
         if (ch == '\b') { // Xử lý Backspace
             if (!password.empty()) {
                 // sleep(1000);
@@ -575,7 +744,7 @@ string MenuController::input() {
 
     while ((ch = _getch()) != '\r') { // '\r' = Enter
         if (ch == 27) // phim ESC = 27
-            return "VK_ESCAPE";
+            return ESCAPE;
         if (ch == '\b') { // Xử lý Backspace
             if (!res.empty()) {
                 // sleep(1000);
@@ -591,7 +760,7 @@ string MenuController::input() {
     return res;
 }
 
-void MenuController::showLogin() {
+void MenuController::showLogin() const {
     int count = 0;
     while (count < 3) {
         system("cls");
@@ -600,14 +769,16 @@ void MenuController::showLogin() {
         cout << string(20, ' ') << ">>>> ";
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
         cout <<"Username: ";
-        string username = input();
-        if (username == "VK_ESCAPE")
+        const string username = input();
+        if (username == ESCAPE)
             return;
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
         cout << string(20, ' ') << ">>>> ";
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
         cout << "Password: ";
-        string password = inputHiddenPassword();
+        const string password = inputHiddenPassword();
+        if (password == ESCAPE)
+            return;
 
         // cout << m_authService->tryLogin(username, password) << endl;
         if (m_authService->tryLogin(username, password)) {
@@ -637,8 +808,8 @@ void MenuController::showLogin() {
     cin.get();
 }
 
-void MenuController::run() {
-    int option;
+void MenuController::run() const {
+    int option = 0;
     do {
         mainMenu();
         auto o = input();
@@ -658,6 +829,7 @@ void MenuController::run() {
                 case 3:
                     showLogin();
                     break;
+                default: ;
             }
         } catch (exception e) {
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);

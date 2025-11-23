@@ -41,7 +41,7 @@ Ticket * TicketQueueRepository::front() {
     return m_tickets.front();
 }
 
-queue<Ticket *> &TicketQueueRepository::getAll() {
+Queue<Ticket *> &TicketQueueRepository::getAll() {
     loadAllTickets();
     return m_tickets;
 }
@@ -93,7 +93,7 @@ void TicketQueueRepository::loadAllTickets() {
     reader.close();
 }
 
-void TicketQueueRepository::saveAllTickets() {
+void TicketQueueRepository::saveAllTickets() const {
     ofstream writer(PATH);
 
     if (!writer.is_open()) {
@@ -101,7 +101,7 @@ void TicketQueueRepository::saveAllTickets() {
         return;
     }
 
-    queue<Ticket*> temp = m_tickets;
+    Queue<Ticket*> temp = m_tickets;
 
     while (!temp.empty()) {
         writer << temp.front()->toString() << endl;

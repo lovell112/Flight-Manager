@@ -7,12 +7,12 @@ Airplane::Airplane() {
     m_strID = "";
     m_iSeatCount = 0;
     m_iEmptySeatCount = 0;
-    m_seatList = vector<bool>(); // danh sách ghế trống rỗng
+    m_seatList = List<bool>(); // danh sách ghế trống rỗng
 }
-Airplane::Airplane(const string& id, const vector<bool>& seats) : m_strID(id), m_seatList(seats) {
+Airplane::Airplane(const string& id, const List<bool>& seats) : m_strID(id), m_seatList(seats) {
     m_iSeatCount = m_seatList.size();
     m_iEmptySeatCount = m_iSeatCount;
-    for (auto seat : m_seatList)
+    for (const auto seat : m_seatList)
         if (seat)
             m_iEmptySeatCount--;
 }
@@ -29,7 +29,7 @@ int Airplane::getSeatCount() const {
     return m_iSeatCount;
 }
 
-vector<bool>& Airplane::getSeatList() {
+List<bool>& Airplane::getSeatList() {
     return m_seatList;
 }
 
@@ -49,13 +49,13 @@ void Airplane::setSeatCount(int count) {
 
     // Đếm lại số ghế trống (false)
     int emptyCount = 0;
-    for (bool seat : m_seatList) {
+    for (const bool seat : m_seatList) {
         if (!seat) emptyCount++;  // false = ghế trống
     }
     m_iEmptySeatCount = emptyCount;
 }
 
-void Airplane::bookSeat(int seatNumber) {
+void Airplane::bookSeat(const int seatNumber) {
     if (seatNumber-1 < 0 || seatNumber-1 >= m_seatList.size() || m_seatList[seatNumber-1])
         return;
 
@@ -63,7 +63,7 @@ void Airplane::bookSeat(int seatNumber) {
     m_iEmptySeatCount--;
 }
 
-void Airplane::cancelSeat(int seatNumber) {
+void Airplane::cancelSeat(const int seatNumber) {
     if (seatNumber-1 < 0 || seatNumber-1 >= m_seatList.size() || !m_seatList[seatNumber-1])
         return;
 
@@ -76,13 +76,13 @@ void Airplane::cancelSeat(int seatNumber) {
 string Airplane::toString() const {
     string info = m_strID;
 
-    for (bool seat : m_seatList)
+    for (const bool seat : m_seatList)
         info += "|" + string(seat ? "1" : "0");
     return info;
 }
 
 // neu ghe khong hop le hoac da duoc dat return false, nguoc lai true. m_seatList[0] = false = ghe thu 0 trong
-bool Airplane::isSeatAvailable(int seatNumber) const {
+bool Airplane::isSeatAvailable(const int seatNumber) const {
     if (seatNumber < 0 || seatNumber-1 >= m_seatList.size())
         return false;
     return !m_seatList[seatNumber-1];

@@ -5,7 +5,7 @@
 #ifndef FLIGHTMANAGER_DATETIME_H
 #define FLIGHTMANAGER_DATETIME_H
 #include <ranges>
-#include <vector>
+#include "../datastructures/List.hpp"
 using namespace std;
 
 
@@ -27,7 +27,7 @@ public:
     void setYear(int);
     void set(const string&);
 
-    static vector<int> split(const string&);
+    static List<int> split(const string&);
 
     string toString() const; // dd/mm/yyyy
 

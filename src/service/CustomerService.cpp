@@ -19,20 +19,20 @@ CustomerService::~CustomerService() {
 }
 
 // them khach hang vao repository
-void CustomerService::addCustomer(const Customer& customer) {
+void CustomerService::addCustomer(const Customer& customer) const {
     m_customerRepository->add(customer);
 }
 
 // - xoa khach hang theo ID
-void CustomerService::removeCustomer(const string& customerID) {
+void CustomerService::removeCustomer(const string& customerID) const {
     m_customerRepository->remove(customerID);
 }
 
-bool CustomerService::tryBookTicket(const string& flightID, const string& customerID, const string& customerFullname, int seatNumber) {
+bool CustomerService::tryBookTicket(const string& flightID, const string& customerID, const string& customerFullname, int seatNumber) const {
     // Kiem tra chuyen bay co ton tai khong
-    auto flight = m_flightRepository->findByID(flightID);
+    const auto flight = m_flightRepository->findByID(flightID);
     if (flight == m_flightRepository->undefineFlight()) {
-        cout << "Khong tim thay chuyen bay voi ID: " << flightID << endl;
+        cout << string(20, ' ') << "Khong tim thay chuyen bay voi ID: " << flightID << endl;
         return false; // khong thi return
     }
 
@@ -40,25 +40,26 @@ bool CustomerService::tryBookTicket(const string& flightID, const string& custom
     if (flightStatus != FlightStatus::AVAILABLE) {
         switch (flightStatus) {
             case FlightStatus::CANCELLED:
-                cout << "Chuyen bay da bi huy\n";
+                cout << string(20, ' ') << "Chuyen bay da bi huy\n";
                 break;
             case FlightStatus::SOLD_OUT:
-                cout << "Chuyen bay da het ve\n";
+                cout << string(20, ' ') << "Chuyen bay da het ve\n";
                 break;
             case FlightStatus::COMPLETED:
-                cout << "Chuyen bay da hoan tat\n";
+                cout << string(20, ' ') << "Chuyen bay da hoan tat\n";
                 break;
+            default: ;
         }
 
         return false;
     }
 
 
-    auto airplane = m_airplaneRepository->findByID((*flight)->getAirplaneID());
-    cerr << (*airplane)->toString() << endl;
+    const auto airplane = m_airplaneRepository->findByID((*flight)->getAirplaneID());
+    // cerr << (*airplane)->toString() << endl;
     // kiem tra ghe trong khong
     if (!(*airplane)->isSeatAvailable(seatNumber)) {
-        cout << "Ghe da duoc dat!" << endl;
+        cout << string(20, ' ') << "Ghe da duoc dat!" << endl;
         return false;
     }
 
@@ -66,25 +67,25 @@ bool CustomerService::tryBookTicket(const string& flightID, const string& custom
     const string ticketID = flightID + "-" + to_string(seatNumber);
     m_ticketQueueRepository->push(Ticket(ticketID, flightID, customerID, customerFullname, seatNumber));
 
-    int customerNumber = m_customerRepository->getAll().size() == 0 ? 0 : m_customerRepository->getAll().size();
+    const int customerNumber = m_customerRepository->getAll().size() == 0 ? 0 : m_customerRepository->getAll().size();
 
     m_customerRepository->add(Customer(customerNumber, customerFullname, customerID));
 
     // cout << (*m_ticketQueueRepository->findByID(ticketID))->toString() << endl;
-    cout << "Dat ve thanh cong cho khach: " << customerFullname << endl;
+    cout << string(20, ' ') << "Dat ve thanh cong cho khach: " << customerFullname << endl;
     return true;
 }
 
-//tim khach hang theo ID, tra ve iterator
-vector<Customer*>::iterator CustomerService::findCustomerByID(const string& customerID) {
-    return m_customerRepository->findByID(customerID);
+//tim khach hang theo ID, tra ve Iterator
+vector<Customer*>::iterator CustomerService::findCustomerByID(const string& customerID) const {
+    return vector<Customer *>::iterator(m_customerRepository->findByID(customerID));
 }
 
-//lay tat ca khach hang, tra ve iterator dau tien
-vector<Customer*>& CustomerService::getAll() {
+//lay tat ca khach hang, tra ve Iterator dau tien
+List<Customer *> CustomerService::getAll() const {
     return m_customerRepository->getAll();
 }
-// end - lay iterator cuoi cung
-vector<Customer*>::iterator CustomerService::undefineCustomer() {
+// end - lay Iterator cuoi cung
+Customer **CustomerService::undefineCustomer() const {
     return m_customerRepository->undefineCustomer();
 }

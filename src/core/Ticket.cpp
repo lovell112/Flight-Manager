@@ -58,7 +58,7 @@ string Ticket::toString() const {
     return info;
 }
 
-void Ticket::printTicketInfo() {
+void Ticket::printTicketInfo() const {
     cout << "Ma ve: " << m_strTicketID << endl;
     cout << "Ma chuyen bay: " << m_strFlightID << endl;
     cout << "Ma khach hang: " << m_strCustomerID << endl;

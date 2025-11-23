@@ -1,4 +1,4 @@
-#ifdef QUEUE_HPP
+#ifndef QUEUE_HPP
 #define QUEUE_HPP
 
 #include <cstddef>
@@ -72,8 +72,8 @@ Queue& operator=(const Queue& other) {
     }
 
     // them phan tu vao cuoi Queue
-    void push(T item) {
-        Node<T>* newNode = new Node<T>(item);
+    void push(const T &item) {
+        auto* newNode = new Node<T>(item);
 
         // neu Queue da co phan tu
         if (m_back) {
@@ -92,7 +92,7 @@ Queue& operator=(const Queue& other) {
     void pop() {
         if (!m_front) throw std::out_of_range("Queue is empty");
 
-        Node<T>* temp = m_front;
+        const Node<T>* temp = m_front;
         m_front = m_front->m_next;
 
         // neu xoa xong Queue rong thi back cung phai null
@@ -104,19 +104,19 @@ Queue& operator=(const Queue& other) {
     }
 
     // kiem tra Queue co rong hay khong
-    bool empty() const {
+    [[nodiscard]] bool empty() const {
         return m_size == 0;
     }
 
     // lay so luong phan tu
-    size_t size() const {
+    [[nodiscard]] size_t size() const {
         return m_size;
     }
 
     // xoa tat ca phan tu trong Queue
     void clear() {
         while (m_front) {
-            Node<T>* temp = m_front;
+            const Node<T>* temp = m_front;
             m_front = m_front->m_next;
             delete temp;
         }

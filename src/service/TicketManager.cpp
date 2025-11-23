@@ -1,13 +1,13 @@
 #include "../../include/service/TicketManager.h"
 
-void TicketManager::saveData() {
+void TicketManager::saveData() const {
     m_ticketRepository->saveAllTickets();
     m_flightRepository->saveAllFlights();
     m_airplaneRepository->saveAllAirplanes();
     m_ticketQueueRepository->saveAllTickets();
     m_customerRepository->saveAllCustomers();
 }
-void TicketManager::loadData() {
+void TicketManager::loadData() const {
     m_ticketRepository->loadAllTickets();
     m_flightRepository->loadAllFlights();
     m_airplaneRepository->loadAllAirplanes();
@@ -32,7 +32,7 @@ TicketManager::~TicketManager() {
     delete m_customerRepository;
 }
 
-void TicketManager::addTicketFromQueue() {
+void TicketManager::addTicketFromQueue() const {
     m_ticketRepository->add(*m_ticketQueueRepository->front());
 
     const auto flight = m_flightRepository->findByID(m_ticketQueueRepository->front()->getFlightID());
@@ -47,80 +47,86 @@ void TicketManager::addTicketFromQueue() {
     loadData();
 }
 
-void TicketManager::removeTicket(const string &ticketID) {
+void TicketManager::removeTicketQueue() const {
+    m_ticketQueueRepository->pop();
+    saveData();
+    loadData();
+}
+
+void TicketManager::removeTicket(const string &ticketID) const {
     const auto ticket = m_ticketRepository->findByID(ticketID);
     if (ticket == m_ticketRepository->undefineTicket()) {
-        cout << "Khong ton tai ve : " << ticketID << endl;
+        // cout << string(20, ' ') << "Khong ton tai ve : " << ticketID << endl;
         return;
     }
 
     const auto flight = m_flightRepository->findByID((*ticket)->getFlightID());
     if ((*flight)->getStatus() == FlightStatus::COMPLETED) {
-        cout << "Chuyen bay " << (*flight)->getFlightID() << " da hoan tat, khong the tra ve\n";
+        // cout << string(20, ' ') << "Chuyen bay " << (*flight)->getFlightID() << " da hoan tat, khong the tra ve\n";
         return;
     }
 
     const auto airplane = m_airplaneRepository->findByID((*flight)->getAirplaneID());
-    m_ticketRepository->remove(ticketID);
     (*flight)->removeTicket(ticketID);
     (*airplane)->cancelSeat((*ticket)->getSeatNumber());
+    m_ticketRepository->remove(ticketID);
 
     saveData();
     loadData();
 }
 
-vector<Ticket*> TicketManager::findByDate(const string& date) {
+List<Ticket*> TicketManager::findByDate(const string& date) const {
     loadData();
     const auto& tickets = m_ticketRepository->getAll();
-    vector<Ticket*> result;
+    List<Ticket *> result;
     for (const auto ticket : tickets) {
         auto flight = m_flightRepository->findByID(ticket->getFlightID());
         if ((*flight)->getDepartureDate() == DateTime(date))
-            result.push_back(ticket);
+            result.add(ticket);
     }
 
     return result;
 }
 
-vector<Ticket*>::iterator TicketManager::findByID(const string& ticketID) {
+Ticket **TicketManager::findByID(const string &ticketID) const {
     loadData();
     return m_ticketRepository->findByID(ticketID);
 }
 
-vector<Ticket*> TicketManager::findByDestination(const string& destination) {
+List<Ticket *> TicketManager::findByDestination(const string &destination) const {
     loadData();
     const auto& tickets = m_ticketRepository->getAll();
-    vector<Ticket*> result;
+    List<Ticket*> result;
     for (const auto ticket : tickets) {
         auto flight = m_flightRepository->findByID(ticket->getFlightID());
         if ((*flight)->getDestinationAirport() == destination)
-            result.push_back(ticket);
+            result.add(ticket);
     }
 
     return result;
 }
 
-vector<Ticket *> TicketManager::findByFlightID(const string &flightID) {
+List<Ticket *> TicketManager::findByFlightID(const string &flightID) const {
     return m_ticketRepository->findByFlightID(flightID);
 }
 
 
-TicketRepository &TicketManager::getTicketRepository() {
+TicketRepository &TicketManager::getTicketRepository() const {
     loadData();
     return *m_ticketRepository;
 }
 
-FlightRepository &TicketManager::getFlightRepository() {
+FlightRepository &TicketManager::getFlightRepository() const {
     loadData();
     return *m_flightRepository;
 }
 
-AirplaneRepository &TicketManager::getAirplaneRepository() {
+AirplaneRepository &TicketManager::getAirplaneRepository() const {
     loadData();
     return *m_airplaneRepository;
 }
 
-TicketQueueRepository &TicketManager::getTicketQueueRepository() {
+TicketQueueRepository &TicketManager::getTicketQueueRepository() const {
     loadData();
     return *m_ticketQueueRepository;
 }

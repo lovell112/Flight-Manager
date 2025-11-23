@@ -1,13 +1,13 @@
 #ifndef FLIGHTMANAGER_TICKETQUEUE_H
 #define FLIGHTMANAGER_TICKETQUEUE_H
-#include <queue>
 
 #include "../core/Ticket.h"
+#include "../datastructures/Queue.hpp"
 #include <vector>
 using namespace std;
 
 class TicketQueueRepository {
-    queue<Ticket*> m_tickets;
+    Queue<Ticket*> m_tickets;
     const string PATH = "../data/ticket_queue.txt";
 public:
     TicketQueueRepository();
@@ -15,13 +15,13 @@ public:
     void push(const Ticket&);
     void pop();
     [[nodiscard]] Ticket* front();
-    queue<Ticket*>& getAll();
+    Queue<Ticket*>& getAll();
 
     vector<Ticket *> getList();
 
     static const Ticket* undefineTicket();
     void loadAllTickets();
-    void saveAllTickets();
+    void saveAllTickets() const;
 };
 
 

@@ -9,6 +9,7 @@
 class FlightManager;
 
 class MenuController {
+    static string ESCAPE;
     CustomerService* m_customerService;
     AuthService* m_authService;
     FlightManager* m_flightManager;
@@ -16,29 +17,27 @@ class MenuController {
 
     // const int
 
-    void mainMenu();
-    void flightListMenu();
-    void bookTicketMenu();
-    void manageMenu();
-    void showAllTicketQueue();
-    void showAllTicket();
-    void showTicketByFlightID(const string&);
+    static void mainMenu();
+    void flightListMenu() const;
+    void bookTicketMenu() const;
+    void manageMenu() const;
+    void showAllTicketQueue() const;
+    void showAllTicket() const;
+    void showTicketByFlightID(const string&) const;
     void showAvailableSeatOfFlight(const string&) const;
-    void showFlightQuantityOfAirplane(const string&);
-    void handleTicketBooking();
-    void handleTicketCancelation();
-    void showStatistics();
+    void showFlightQuantityOfAirplane(const string&) const;
+    void handleTicketBooking() const;
+    void handleTicketCancelation() const;
+    void showStatistics() const;
 
     static void displayLoginLogo();
 
     static string inputHiddenPassword();
     static string input();
-    void showLogin();
+    void showLogin() const;
 public:
     MenuController();
     ~MenuController();
-    void run();
+    void run() const;
 };
-
-
 #endif //AIRPLANEMANAGER_MENUCONTROLLER_H

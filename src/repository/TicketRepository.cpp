@@ -20,7 +20,7 @@ TicketRepository::~TicketRepository() {
     // them ve vao danh sach
 void TicketRepository::add(const Ticket& ticket) {
     loadAllTickets();
-    m_tickets.push_back(new Ticket(ticket));
+    m_tickets.add(new Ticket(ticket));
     saveAllTickets();
     loadAllTickets();
 }
@@ -29,35 +29,31 @@ void TicketRepository::add(const Ticket& ticket) {
 // xoa ve theo ID
 
 void TicketRepository::remove(const string& ticketID) {
-    loadAllTickets();
-    auto it = findByID(ticketID);
-    if (it != undefineTicket()) {
+    if (auto it = findByID(ticketID); it != undefineTicket()) {
         delete *it;  // Giai phong bo nho
-        m_tickets.erase(it);
+        m_tickets.remove(it);
         filesystem::remove(FOLDER_PATH+"/"+ticketID);
-    } else {
-        cerr << "khong tim thay ve co ID: " << ticketID << endl;
     }
     saveAllTickets();
     loadAllTickets();
 }
 
 // tim ve theo ID
-vector<Ticket*>::iterator TicketRepository::findByID(const string& id) {
+Ticket** TicketRepository::findByID(const string& id) {
     loadAllTickets();
-    for (auto it = m_tickets.begin(); it != m_tickets.end(); ++it) {
-        if ((*it)->getTicketID() == id) {
-            return it;
+    for (auto& ticket : m_tickets) {
+        if (ticket->getTicketID() == id) {
+            return &ticket;
         }
     }
     return undefineTicket(); // khong tim thay thi return
 }
 
-vector<Ticket *> TicketRepository::findByFlightID(const string &flightID) const {
-    vector<Ticket*> res;
+List<Ticket *> TicketRepository::findByFlightID(const string &flightID) const {
+    List<Ticket*> res;
     for (auto ticket : m_tickets) {
         if (ticket->getFlightID() == flightID)
-            res.push_back(ticket);
+            res.add(ticket);
     }
 
     return res;
@@ -65,16 +61,15 @@ vector<Ticket *> TicketRepository::findByFlightID(const string &flightID) const 
 
 // lay toan bo danh sach vé
 // ===============================
-vector<Ticket*>& TicketRepository::getAll() {
+List<Ticket*>& TicketRepository::getAll() {
     loadAllTickets();
     return m_tickets;
 }
 
-const vector<Ticket *>::iterator TicketRepository::undefineTicket() {
+Ticket **TicketRepository::undefineTicket() {
     loadAllTickets();
     return m_tickets.end();
 }
-
 
 // tai du lieu ve tu file ra
 void TicketRepository::loadAllTickets() {
@@ -105,8 +100,8 @@ void TicketRepository::loadAllTickets() {
             getline(spliter, customerID, '|');
             getline(spliter, customerName, '|');
             getline(spliter, seatNumber, '|');
-            Ticket* ticket = new Ticket(ticketID, flightID, customerID, customerName, stoi(seatNumber));
-            m_tickets.push_back(ticket);
+            auto ticket = new Ticket(ticketID, flightID, customerID, customerName, stoi(seatNumber));
+            m_tickets.add(ticket);
             reader.close();
         }
     }
@@ -117,9 +112,9 @@ void TicketRepository::loadAllTickets() {
 //
 // luu toan bo ve ra file
 //
-void TicketRepository::saveAllTickets() {
+void TicketRepository::saveAllTickets() const {
 
-    for (auto& ticket : m_tickets) {
+    for (const auto& ticket : m_tickets) {
         const string PATH = FOLDER_PATH + "/" + ticket->getTicketID();
         ofstream writer(PATH);
         // kiem tra doc file

@@ -11,7 +11,7 @@ AdminRepository::~AdminRepository() {
     saveAllAdmins();
 
     // Delete tat ca admin tranh bi leak memory
-    for (auto& admin : m_admins) {
+    for (const auto& admin : m_admins) {
         delete admin;
     }
 
@@ -41,7 +41,7 @@ void AdminRepository::loadAllAdmins() {
         string username, password;
         getline(spliter, username, '|'); // tach username
         getline(spliter, password, '|'); // Tach password
-        m_admins.push_back(new Admin(username, password)); // add admin vao repo
+        m_admins.add(new Admin(username, password)); // add admin vao repo
     }
     reader.close();
 }
@@ -62,7 +62,7 @@ void AdminRepository::saveAllAdmins() const {
     writer.close();
 }
 
-vector<Admin*>::iterator AdminRepository::getValidateAdmin(const string &username, const string &password) {
+Admin** AdminRepository::getValidateAdmin(const string &username, const string &password) {
     loadAllAdmins();
     // Su dung iterator de duyet cac admin va kiem tra, neu ton tai, return 1 iterator cua admin do
     for (auto admin = m_admins.begin(); admin != m_admins.end(); admin++) {
@@ -73,12 +73,12 @@ vector<Admin*>::iterator AdminRepository::getValidateAdmin(const string &usernam
     return undefineAdmin();
 }
 
-vector<Admin *>::iterator AdminRepository::begin() {
+Admin** AdminRepository::begin() {
     loadAllAdmins();
     return m_admins.begin();
 }
 
-vector<Admin *>::iterator AdminRepository::undefineAdmin() {
+Admin** AdminRepository::undefineAdmin() {
     loadAllAdmins();
     return m_admins.end();
 }

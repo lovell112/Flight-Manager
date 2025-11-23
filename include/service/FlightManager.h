@@ -15,29 +15,34 @@ class FlightManager {
     AirplaneRepository* m_airplaneRepository;
     CustomerRepository* m_customerRepository;
 
-    void saveData();
-    void loadData();
+    void saveData() const;
+    void loadData() const;
 public:
     FlightManager();
     FlightManager(FlightRepository*, TicketRepository*, AirplaneRepository*, CustomerRepository*);
 
     ~FlightManager();
-    void addFlight(const Flight&);
-    void cancelFlight(const string&);
-    void updateFlightStatus(const string&, const FlightStatus&);
 
-    vector<Flight*>::iterator findFlightByID(const string&);
-    vector<Flight*> findFlightByDate(const string&);
-    vector<Flight*> findFlightByDestination(const string&);
-    vector<int> getAvailableSeat(const string&);
-    vector<Flight*> findFlightQuantityOfAirplane(const string&);
+    [[nodiscard]] FlightRepository& getFlightRepository() const;
 
-    int countFlightOfOneAirplane(const string&);
-    vector<int> getSeats(const string&);
-    vector<Flight*>& getAllFlight();
+    [[nodiscard]] TicketRepository& getTicketRepository() const;
+
+    [[nodiscard]] AirplaneRepository& getAirplaneRepository() const;
+
+    [[nodiscard]] CustomerRepository& getCustomerRepository() const;
+    void addFlight(const Flight&) const;
+    void cancelFlight(const string&) const;
+    void updateFlightStatus(const string&, const FlightStatus&) const;
+
+    Flight** findFlightByID(const string&) const;
+    List<Flight*> findFlightByDate(const string&) const;
+    List<Flight*> findFlightByDestination(const string&) const;
+    List<int> getAvailableSeat(const string&) const;
+    List<Flight*> findFlightQuantityOfAirplane(const string&) const;
+
+    int countFlightOfOneAirplane(const string&) const;
+    List<int> getSeats(const string&) const;
+    List<Flight*>& getAllFlight() const;
 };
-
-
-
 
 #endif //AIRPLANEMANAGER_FLIGHTMANAGER_H

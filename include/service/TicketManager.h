@@ -15,20 +15,21 @@ class TicketManager {
     TicketQueueRepository* m_ticketQueueRepository;
     CustomerRepository* m_customerRepository;
 
-    void saveData();
-    void loadData();
+    void saveData() const;
+    void loadData() const;
 public:
     TicketManager();
     ~TicketManager();
-    void addTicketFromQueue();
-    void removeTicket(const string&);
-    vector<Ticket*> findByDate(const string&);
-    vector<Ticket*>::iterator findByID(const string&);
-    vector<Ticket*> findByDestination(const string&);
-    vector<Ticket*> findByFlightID(const string&);
-    TicketRepository& getTicketRepository();
-    FlightRepository& getFlightRepository();
-    AirplaneRepository& getAirplaneRepository();
-    TicketQueueRepository& getTicketQueueRepository();
+    void addTicketFromQueue() const;
+    void removeTicketQueue() const;
+    void removeTicket(const string&) const;
+    List<Ticket*> findByDate(const string&) const;
+    Ticket** findByID(const string&) const;
+    List<Ticket*> findByDestination(const string&) const;
+    List<Ticket*> findByFlightID(const string&) const;
+    TicketRepository& getTicketRepository() const;
+    FlightRepository& getFlightRepository() const;
+    AirplaneRepository& getAirplaneRepository() const;
+    TicketQueueRepository& getTicketQueueRepository() const;
 };
 #endif //AIRPLANEMANAGER_TICKETMANAGER_H

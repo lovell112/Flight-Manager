@@ -23,15 +23,17 @@ public:
     CustomerService();
     ~CustomerService();
 
-    void addCustomer(const Customer&);
-    void removeCustomer(const string&);
+    void addCustomer(const Customer&) const;
+    void removeCustomer(const string&) const;
 
-    bool tryBookTicket(const string&, const string&, const string&, int);
+    bool tryBookTicket(const string&, const string&, const string&, int) const;
     // bool tryCancelTicket(const string&, const string&);
 
-    vector<Customer*>::iterator findCustomerByID(const string&);
-    vector<Customer*>& getAll();
-    vector<Customer*>::iterator undefineCustomer();
+    vector<Customer*>::iterator findCustomerByID(const string&) const;
+
+    List<Customer *> getAll() const;
+
+    Customer **undefineCustomer() const;
 };
 
 #endif //FLIGHTMANAGER_CUSTOMERSERVICE_H

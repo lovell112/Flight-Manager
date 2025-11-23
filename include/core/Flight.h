@@ -6,7 +6,7 @@
 #define FLIGHTMANAGER_FLIGHT_H
 
 #include <string>
-#include <vector>
+#include "../datastructures/List.hpp"
 #include <iostream>
 #include "../../include/core/FlightStatus.h"
 #include "../../include/core/Ticket.h"
@@ -21,7 +21,7 @@ private:
     string m_strDestinationAirport;
     DateTime* m_departureDate;
     FlightStatus m_status;
-    vector<string> m_tickets;
+    List<string> m_tickets;
 
 public:
 
@@ -31,7 +31,7 @@ public:
         const string &destination,
         const string &departure,
         const FlightStatus &status,
-        const vector<string> &tickets);
+        const List<string> &tickets);
     ~Flight();
 
 
@@ -41,7 +41,7 @@ public:
     [[nodiscard]] const string& getDestinationAirport() const;
     [[nodiscard]] const DateTime& getDepartureDate() const;
     [[nodiscard]] const FlightStatus& getStatus() const;
-    vector<string>& getTickets();
+    List<string>& getTickets();
 
     void setFlightID(const string&);
     void setAirplaneID(const string&);
@@ -52,7 +52,7 @@ public:
     void addTicket(const string&);
     void removeTicket(const string&);
 
-    [[nodiscard]] const string toString() const;
+    [[nodiscard]] string toString() const;
     void printFlightInfo() const;
 };
 

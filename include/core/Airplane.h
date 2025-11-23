@@ -1,7 +1,7 @@
 #ifndef AIRPLANEMANAGER_AIRPLANE_H
 #define AIRPLANEMANAGER_AIRPLANE_H
 #include <iostream>
-#include <vector>
+#include "../datastructures/List.hpp"
 #include <string>
 using namespace std;
 
@@ -9,17 +9,17 @@ class Airplane {
     string m_strID;
     int m_iSeatCount;
     int m_iEmptySeatCount;
-    vector<bool> m_seatList;
+    List<bool> m_seatList;
 public:
     //  Constructor / Destructor
     Airplane();
-    Airplane(const string&, const vector<bool>&);
+    Airplane(const string&, const List<bool>&);
     ~Airplane();
 
     //  Getter
     [[nodiscard]] string getID() const;
     [[nodiscard]] int getSeatCount() const;
-    vector<bool>& getSeatList();
+    List<bool>& getSeatList();
 
     //  Setter
     void setSeatCount(int);

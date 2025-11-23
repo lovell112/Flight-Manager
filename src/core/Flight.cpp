@@ -11,7 +11,7 @@ Flight::Flight(const string& flightID,
     const string& destination,
     const string& departure,
     const FlightStatus& status,
-    const vector<string>& tickets)
+    const List<string>& tickets)
     : m_strFlightID(flightID),
     m_strAirplaneID(airplaneID),
     m_strDestinationAirport(destination),
@@ -43,7 +43,7 @@ const FlightStatus& Flight::getStatus() const {
     return m_status;
 }
 
-vector<string>& Flight::getTickets() {
+List<string>& Flight::getTickets() {
     return m_tickets;
 }
 
@@ -68,11 +68,16 @@ void Flight::setFlightStatus(const FlightStatus& status) {
     m_status = status;
 }
 
-void Flight::addTicket(const string& ticketID) { m_tickets.push_back(ticketID); }
+void Flight::addTicket(const string& ticketID) { m_tickets.add(ticketID); }
 
-void Flight::removeTicket(const string& ticketID) { m_tickets.erase(remove(m_tickets.begin(), m_tickets.end(), ticketID), m_tickets.end()); }
+void Flight::removeTicket(const string& ticketID) {
+    for (size_t i = 0; i < m_tickets.size(); i++) {
+        if (m_tickets[i] == ticketID)
+            m_tickets.remove(i);
+    }
+}
 
-const string Flight::toString() const {
+string Flight::toString() const {
     string result;
     result += m_strFlightID + "|" +
         m_strAirplaneID + "|" +

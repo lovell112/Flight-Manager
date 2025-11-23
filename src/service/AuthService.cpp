@@ -9,10 +9,9 @@ AuthService::~AuthService() {
     delete m_adminRepository; // delete repo
 }
 
-const vector<Admin *>::iterator &AuthService::getCurrentAdmin() const {
+Admin **AuthService::getCurrentAdmin() const {
     return m_currentAdmin;
 }
-
 
 bool AuthService::tryLogin(const string &username, const string &password) {
     // Lay admin hop le gan cho admin hien tai
@@ -24,7 +23,7 @@ bool AuthService::tryLogin(const string &username, const string &password) {
     return true;
 }
 
-bool AuthService::tryChangePassword(const string &oldPassword, const string &newPassword) {
+bool AuthService::tryChangePassword(const string &oldPassword, const string &newPassword) const {
 
     // Neu chua dang nhap thi khong the doi mat khau
     if (m_currentAdmin == m_adminRepository->undefineAdmin())
