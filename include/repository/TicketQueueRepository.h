@@ -19,7 +19,7 @@ public:
 
     vector<Ticket *> getList();
 
-    static const Ticket* undefineTicket();
+    const Ticket* undefineTicket();
     void loadAllTickets();
     void saveAllTickets() const;
 };

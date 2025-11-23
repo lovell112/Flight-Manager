@@ -25,6 +25,7 @@ public:
     void setSeatNumber(int);
     [[nodiscard]] string toString() const;
     void printTicketInfo() const;
+    bool operator==(const Ticket &) const;
 };
 
 

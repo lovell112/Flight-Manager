@@ -91,9 +91,11 @@ public:
     }
 
     bool contains(const T& key) const {
-        for (size_t i = 0; i < m_iSize; i++)
-            if (m_pArray[i] == key)
+        for (size_t i = 0; i < m_iSize; i++) {
+            auto j = m_pArray[i];
+            if (*m_pArray[i] == *key)
                 return true;
+        }
         return false;
     }
 
@@ -150,13 +152,7 @@ public:
         }
     }
 
-    T& operator[](size_t index) {
-        if (index >= m_iSize)
-            throw std::out_of_range("Index out of range");
-        return m_pArray[index];
-    }
-
-    const T& operator[](size_t index) const {
+    T& operator[](size_t index) const {
         if (index >= m_iSize)
             throw std::out_of_range("Index out of range");
         return m_pArray[index];

@@ -21,12 +21,12 @@ public:
     void remove(const string&);
     void setFlightStatus(const string&, const FlightStatus&);
 
-    Flight** findByID(const string&);
+    Flight **findByID(const string &);
     List<Flight*> findByDate(const string&);
     List<Flight*> findByDestination(const string&);
     List<Flight*> findByAirplane(const string&);
 
-    [[nodiscard]] Flight** undefineFlight();
+    [[nodiscard]] Flight **undefineFlight();
 
     List<Flight*>& getAll();
     void loadAllFlights();

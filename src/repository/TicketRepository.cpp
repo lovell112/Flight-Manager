@@ -38,6 +38,10 @@ void TicketRepository::remove(const string& ticketID) {
     loadAllTickets();
 }
 
+bool TicketRepository::contains(Ticket *const ticket) const {
+    return m_tickets.contains(ticket);
+}
+
 // tim ve theo ID
 Ticket** TicketRepository::findByID(const string& id) {
     loadAllTickets();
@@ -75,9 +79,11 @@ Ticket **TicketRepository::undefineTicket() {
 void TicketRepository::loadAllTickets() {
 
     // don dep du lieu cu de load du lieu moi len
-    for (auto& ticket : m_tickets)
-        delete ticket;
-    m_tickets.clear();
+    if (!m_tickets.empty()) {
+        for (auto& ticket : m_tickets)
+            delete ticket;
+        m_tickets.clear();
+    }
 
     // truy cap vao thu muc, doc tung file mot
     for (auto& entry : filesystem::directory_iterator(FOLDER_PATH)) {

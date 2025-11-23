@@ -65,3 +65,7 @@ void Ticket::printTicketInfo() const {
     cout << "Ten khach hang: " << m_strCustomerName << endl;
     cout << "So ghe: " << m_iSeatNumber << endl;
 }
+
+bool Ticket::operator==(const Ticket &other) const {
+    return m_strTicketID == other.m_strTicketID;
+}

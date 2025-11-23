@@ -20,6 +20,7 @@ public:
     ~TicketRepository();
     void add(const Ticket&);
     void remove(const string&);
+    [[nodiscard]] bool contains(Ticket *) const;
     Ticket** findByID(const string&);
     [[nodiscard]] List<Ticket*> findByFlightID(const string&) const;
     List<Ticket*>& getAll();

@@ -32,8 +32,13 @@ TicketManager::~TicketManager() {
     delete m_customerRepository;
 }
 
-void TicketManager::addTicketFromQueue() const {
-    m_ticketRepository->add(*m_ticketQueueRepository->front());
+bool TicketManager::addTicketFromQueue() const {
+    auto ticket = *m_ticketQueueRepository->front();
+    if (m_ticketRepository->contains(&ticket)) {
+        m_ticketQueueRepository->pop(); // delete ve khoi hang doi
+        return false;
+    }
+    m_ticketRepository->add(ticket);
 
     const auto flight = m_flightRepository->findByID(m_ticketQueueRepository->front()->getFlightID());
     const auto airplane = m_airplaneRepository->findByID((*flight)->getAirplaneID());
@@ -45,6 +50,7 @@ void TicketManager::addTicketFromQueue() const {
 
     saveData();
     loadData();
+    return true;
 }
 
 void TicketManager::removeTicketQueue() const {
