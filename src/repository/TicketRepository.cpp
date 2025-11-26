@@ -8,6 +8,7 @@ TicketRepository::TicketRepository() {
 }
 
 TicketRepository::~TicketRepository() {
+    loadAllTickets(); // cap nhat du lieu moi nhat
     saveAllTickets();  // auto save truoc khi huy
 
     //delete tat ca tickets
@@ -18,44 +19,70 @@ TicketRepository::~TicketRepository() {
 }
     // them ve vao danh sach
 void TicketRepository::add(const Ticket& ticket) {
-    m_tickets.push_back(new Ticket(ticket));
+    loadAllTickets();
+    m_tickets.add(new Ticket(ticket));
+    saveAllTickets();
+    loadAllTickets();
 }
 
 // xoa ve theo ID
 
 void TicketRepository::remove(const string& ticketID) {
-    auto it = findByID(ticketID);
-    if (it != undefineTicket()) {
+    if (auto it = findByID(ticketID); it != undefineTicket()) {
         delete *it;  // Giai phong bo nho
-        m_tickets.erase(it);
-    } else {
-        cerr << "khong tim thay ve co ID: " << ticketID << endl;
+        m_tickets.remove(it);
+        filesystem::remove(FOLDER_PATH+"/"+ticketID);
     }
+    saveAllTickets();
+    loadAllTickets();
+}
+
+bool TicketRepository::contains(Ticket *const ticket) const {
+    return m_tickets.contains(ticket);
 }
 
 // tim ve theo ID
-vector<Ticket*>::iterator TicketRepository::findByID(const string& id) {
-    for (auto it = m_tickets.begin(); it != m_tickets.end(); ++it) {
-        if ((*it)->getTicketID() == id) {
-            return it;
+Ticket** TicketRepository::findByID(const string& id) {
+    loadAllTickets();
+    for (auto& ticket : m_tickets) {
+        if (ticket->getTicketID() == id) {
+            return &ticket;
         }
     }
     return undefineTicket(); // khong tim thay thi return
 }
 
+List<Ticket *> TicketRepository::findByFlightID(const string &flightID) const {
+    List<Ticket*> res;
+    for (auto ticket : m_tickets) {
+        if (ticket->getFlightID() == flightID)
+            res.add(ticket);
+    }
+
+    return res;
+}
+
 // lay toan bo danh sach vé
 // ===============================
-vector<Ticket*>& TicketRepository::getAll() {
+List<Ticket*>& TicketRepository::getAll() {
+    loadAllTickets();
     return m_tickets;
 }
 
-const vector<Ticket *>::iterator TicketRepository::undefineTicket() {
+Ticket **TicketRepository::undefineTicket() {
+    loadAllTickets();
     return m_tickets.end();
 }
 
-
 // tai du lieu ve tu file ra
 void TicketRepository::loadAllTickets() {
+
+    // don dep du lieu cu de load du lieu moi len
+    if (!m_tickets.empty()) {
+        for (auto& ticket : m_tickets)
+            delete ticket;
+        m_tickets.clear();
+    }
 
     // truy cap vao thu muc, doc tung file mot
     for (auto& entry : filesystem::directory_iterator(FOLDER_PATH)) {
@@ -69,7 +96,6 @@ void TicketRepository::loadAllTickets() {
                 return;
             }
 
-            m_tickets.clear();
             string ticketID, flightID, customerID, customerName, seatNumber;
             string line;
             getline(reader, line);
@@ -79,8 +105,8 @@ void TicketRepository::loadAllTickets() {
             getline(spliter, customerID, '|');
             getline(spliter, customerName, '|');
             getline(spliter, seatNumber, '|');
-            Ticket* ticket = new Ticket(ticketID, flightID, customerID, customerName, stoi(seatNumber));
-            m_tickets.push_back(ticket);
+            auto ticket = new Ticket(ticketID, flightID, customerID, customerName, stoi(seatNumber));
+            m_tickets.add(ticket);
             reader.close();
         }
     }
@@ -91,9 +117,15 @@ void TicketRepository::loadAllTickets() {
 //
 // luu toan bo ve ra file
 //
+<<<<<<< HEAD
 void TicketRepository::saveAllTickets() {
     for (auto& ticket : m_tickets) {
         cout << ticket->toString() << endl;
+=======
+void TicketRepository::saveAllTickets() const {
+
+    for (const auto& ticket : m_tickets) {
+>>>>>>> d1df80c35c24a9a820488e7d5aa050626bd9f305
         const string PATH = FOLDER_PATH + "/" + ticket->getTicketID();
         ofstream writer(PATH);
         // kiem tra doc file
@@ -106,9 +138,4 @@ void TicketRepository::saveAllTickets() {
 
         writer.close();
     }
-
-    cout << "da luu toan bo ve ra file." << endl;
 }
-
-
-

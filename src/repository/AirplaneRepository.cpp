@@ -7,30 +7,38 @@ AirplaneRepository::AirplaneRepository() {
 
 // ===== Destructor =====
 AirplaneRepository::~AirplaneRepository() {
-    saveAllAirplanes();
+    loadAllAirplanes(); // cap nhat du lieu moi nhat
+    saveAllAirplanes(); // auto save
 
     // Giải phóng bộ nhớ để tránh leak
-    for (auto airplane : m_airplanes)
+    for (const auto airplane : m_airplanes)
         delete airplane;
     m_airplanes.clear();
 }
 
 // ====== Thêm máy bay ======
 void AirplaneRepository::add(const Airplane& airplane) {
-    m_airplanes.push_back(new Airplane(airplane));
+    loadAllAirplanes();
+    m_airplanes.add(new Airplane(airplane));
+    saveAllAirplanes();
+    loadAllAirplanes();
 }
 
 // ====== Xóa máy bay theo ID ======
 void AirplaneRepository::remove(const string& id) {
+    loadAllAirplanes();
     auto it = findByID(id);
     if (it != undefineAirplane()) {
         delete *it;
-        m_airplanes.erase(it);
+        m_airplanes.remove(it);
     }
+    saveAllAirplanes();
+    loadAllAirplanes();
 }
 
 // ====== Tìm máy bay theo ID ======
-vector<Airplane*>::iterator AirplaneRepository::findByID(const string& id) {
+Airplane **AirplaneRepository::findByID(const string &id) {
+    loadAllAirplanes();
     for (auto it = m_airplanes.begin(); it != m_airplanes.end(); ++it) {
         if ((*it)->getID() == id)
             return it;
@@ -39,25 +47,28 @@ vector<Airplane*>::iterator AirplaneRepository::findByID(const string& id) {
 }
 
 // ====== Lấy danh sách ghế của máy bay ======
-vector<int> AirplaneRepository::getSeatList(const string& id) {
-    auto it = findByID(id);
-    vector<int> result;
+List<int> AirplaneRepository::getSeatList(const string &id) {
+    loadAllAirplanes();
+    const auto it = findByID(id);
+    List<int> result;
 
     if (it != undefineAirplane()) {
-        vector<bool> seats = (*it)->getSeatList();
-        for (bool s : seats)
-            result.push_back(s ? 1 : 0);
+        auto seats = (*it)->getSeatList();
+        for (const bool s : seats)
+            result.add(s ? 1 : 0);
     }
     return result;
 }
 
 // ====== Lấy toàn bộ danh sách ======
-vector<Airplane*>& AirplaneRepository::getAll() {
+List<Airplane *> &AirplaneRepository::getAll() {
+    loadAllAirplanes();
     return m_airplanes;
 }
 
 // tra ve 1 doi tuong khong ton tai theo dang iterator - o day se la iterator end
-const vector<Airplane *>::iterator AirplaneRepository::undefineAirplane() {
+Airplane **AirplaneRepository::undefineAirplane() {
+    loadAllAirplanes();
     return m_airplanes.end();
 }
 
@@ -69,17 +80,27 @@ void AirplaneRepository::loadAllAirplanes() {
         return;
     }
 
+    for (auto& plane :m_airplanes)
+        delete plane;
+    m_airplanes.clear();
+
     string line;
     while (getline(reader, line)) {
-        stringstream ss(line);
+        if (line.empty())
+            continue;
+        stringstream spliter(line);
         string id;
         int seatCount;
 
-        getline(ss, id, '|');  // Tách phần ID trước dấu '|'
-        ss >> seatCount;       // Đọc tiếp số lượng ghế
+        getline(spliter, id, '|');  // Tách phần ID trước dấu '|'
+        List<bool> seats;
+        string strTemp;
+        while (getline(spliter, strTemp, '|')) {
+            seats.add(strTemp == "1" ? 1 : 0);
+        }
 
-        Airplane* plane = new Airplane(id, seatCount); // Tạo đối tượng máy bay mới
-        m_airplanes.push_back(plane); // Lưu con trỏ vào vector
+        auto plane = new Airplane(id, seats); // Tạo đối tượng máy bay mới
+        m_airplanes.add(plane); // Lưu con trỏ vào vector
     }
 
     reader.close();
@@ -94,11 +115,7 @@ void AirplaneRepository::saveAllAirplanes() const {
     }
 
     for (const auto& plane : m_airplanes) {
-        writer << plane->getID();
-        for (bool seat : plane->getSeatList()) {
-            writer << "|" + string(seat ? "1" : "0");
-        }
-        writer << endl;
+        writer << plane->toString() << endl;
     }
 
     writer.close();

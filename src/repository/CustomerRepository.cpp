@@ -7,6 +7,7 @@ CustomerRepository::CustomerRepository() {
 
 // Destructor - luu du lieu xuong file truoc khi delete
 CustomerRepository::~CustomerRepository() {
+    loadAllCustomers(); // cap nhat du lieu moi nhat
     // Luu lai cac khach hang truoc khi delete
     saveAllCustomers();
     for (auto& customer : m_customers) {
@@ -17,20 +18,27 @@ CustomerRepository::~CustomerRepository() {
 
 // add - them khach hang vao danh sach
 void CustomerRepository::add(const Customer& customer) {
-    m_customers.push_back(new Customer(customer));
+    loadAllCustomers();
+    m_customers.add(new Customer(customer));
+    saveAllCustomers();
+    loadAllCustomers();
 }
 
 // remove - xoa khach hang theo ID
 void CustomerRepository::remove(const string& customerID) {
+    loadAllCustomers();
     auto it = findByID(customerID);
     if (it != undefineCustomer()) {
         delete *it;
-        m_customers.erase(it);
+        m_customers.remove(it);
     }
+    saveAllCustomers();
+    loadAllCustomers();
 }
 
 // findByID - tim khach hang theo ID, tra ve iterator
-vector<Customer*>::iterator CustomerRepository::findByID(const string& customerID) {
+Customer **CustomerRepository::findByID(const string &customerID) {
+    loadAllCustomers();
     for (auto it = m_customers.begin(); it != m_customers.end(); ++it) {
         if ((*it)->getCustomerID() == customerID) {
             return it;
@@ -41,12 +49,14 @@ vector<Customer*>::iterator CustomerRepository::findByID(const string& customerI
 }
 
 // getAll - tra ve danh sach customer
-vector<Customer*>& CustomerRepository::getAll() {
+List<Customer *> &CustomerRepository::getAll() {
+    loadAllCustomers();
     return m_customers;
 }
 
 // tra ve 1 phan tu khong hop le trong danh sach - o day se la iterator end
-vector<Customer*>::iterator CustomerRepository::undefineCustomer() {
+Customer **CustomerRepository::undefineCustomer() {
+    loadAllCustomers();
     return m_customers.end();
 }
 
@@ -57,6 +67,10 @@ void CustomerRepository::loadAllCustomers() {
         cerr << "Khong doc duoc file\n";
         return;
     }
+
+    for (auto& customer : m_customers)
+        delete customer;
+    m_customers.clear();
 
     // Doc 1 dong, sau do tach du lieu tu dong doc duoc
     string line;
@@ -71,7 +85,7 @@ void CustomerRepository::loadAllCustomers() {
         getline(spliter, id, '|');        
         
         int number = stoi(numberStr);
-        m_customers.push_back(new Customer(number, fullName, id)); // add customer vao repo
+        m_customers.add(new Customer(number, fullName, id)); // add customer vao repo
     }
     reader.close();
 }

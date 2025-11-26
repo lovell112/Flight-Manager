@@ -4,20 +4,20 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <vector>
+#include "../datastructures/List.hpp"
 using namespace std;
 
 class AdminRepository {
-    vector<Admin*> m_admins;
+    List<Admin*> m_admins;
     const string PATH = "../data/admin.txt";
 public:
     AdminRepository();
     ~AdminRepository();
     void loadAllAdmins();
     void saveAllAdmins() const;
-    vector<Admin*>::iterator getValidateAdmin(const string&, const string&);
-    vector<Admin*>::iterator begin();
-    vector<Admin*>::iterator invalidAdmin();
+    Admin** getValidateAdmin(const string&, const string&);
+    Admin** begin();
+    Admin** undefineAdmin();
 };
 
 

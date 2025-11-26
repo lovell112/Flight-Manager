@@ -5,13 +5,14 @@
 
 class AuthService {
     AdminRepository* m_adminRepository;
-    vector<Admin*>::iterator m_currentAdmin;
+    Admin** m_currentAdmin;
 public:
     AuthService();
     ~AuthService();
-    const vector<Admin*>::iterator& getCurrentAdmin() const;
+
+    Admin **getCurrentAdmin() const;
     bool tryLogin(const string&, const string&);
-    bool tryChangePassword(const string&, const string&);
+    bool tryChangePassword(const string&, const string&) const;
     void logout();
 };
 

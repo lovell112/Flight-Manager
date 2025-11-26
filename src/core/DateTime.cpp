@@ -45,10 +45,10 @@ void DateTime::set(const string &date) {
 }
 
 // tach chuoi date ra thanh ngay/thang/nam
-vector<int> DateTime::split(const string& date) {
+List<int> DateTime::split(const string& date) {
 
     stringstream spliter(date);
-    vector<int> res(3);
+    List<int> res(3);
 
     // dung stringstream de tach chuoi khi gap '/'
     string day, month, year;

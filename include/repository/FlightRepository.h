@@ -5,14 +5,14 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <vector>
+#include "../datastructures/List.hpp"
 #include <iostream>
 using namespace std;
 
 class FlightRepository {
 private:
     const string PATH = "../data/flight.txt";
-    vector<Flight*> m_flights;
+    List<Flight*> m_flights;
 
 public:
     FlightRepository();
@@ -21,13 +21,14 @@ public:
     void remove(const string&);
     void setFlightStatus(const string&, const FlightStatus&);
 
-    vector<Flight*>::iterator findByID(const string&);
-    vector<Flight*> findByDate(const string&);
-    vector<Flight*> findByDestination(const string&);
+    Flight **findByID(const string &);
+    List<Flight*> findByDate(const string&);
+    List<Flight*> findByDestination(const string&);
+    List<Flight*> findByAirplane(const string&);
 
-    [[nodiscard]] vector<Flight*>::iterator undefineFlight();
+    [[nodiscard]] Flight **undefineFlight();
 
-    vector<Flight*>& getAll();
+    List<Flight*>& getAll();
     void loadAllFlights();
     void saveAllFlights();
 };

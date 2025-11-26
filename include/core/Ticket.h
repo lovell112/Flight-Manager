@@ -13,18 +13,19 @@ class Ticket {
 public:
     Ticket(const string&, const string&, const string&, const string&, int);
     ~Ticket();
-    const string& getTicketID() const;
-    const string& getFlightID() const;
-    const string& getCustomerID() const;
-    const string& getCustomerName() const;
-    int getSeatNumber() const;
+    [[nodiscard]] const string& getTicketID() const;
+    [[nodiscard]] const string& getFlightID() const;
+    [[nodiscard]] const string& getCustomerID() const;
+    [[nodiscard]] const string& getCustomerName() const;
+    [[nodiscard]] int getSeatNumber() const;
     void setTicketID(const string&);
     void setFlightID(const string&);
     void setCustomerID(const string&);
     void setCustomerName(const string&);
     void setSeatNumber(int);
-    string toString() const;
-    void printTicketInfo();
+    [[nodiscard]] string toString() const;
+    void printTicketInfo() const;
+    bool operator==(const Ticket &) const;
 };
 
 

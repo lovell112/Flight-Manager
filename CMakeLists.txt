@@ -38,4 +38,9 @@ add_executable(${PROJECT_NAME} main.cpp
         src/repository/TicketRepository.cpp
         include/repository/TicketRepository.h
         src/core/DateTime.cpp
-        include/core/DateTime.h)
+        include/core/DateTime.h
+        src/repository/TicketQueueRepository.cpp
+        include/repository/TicketQueueRepository.h
+        include/datastructures/List.hpp
+        include/datastructures/Queue.hpp
+)

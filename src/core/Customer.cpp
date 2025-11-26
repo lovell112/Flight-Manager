@@ -25,7 +25,7 @@ const string& Customer::getFullName() const {
 }
 
 //  lấys ID
-const int Customer::getNumber() const {
+int Customer::getNumber() const {
     return m_iNumber;
 }
 
@@ -45,7 +45,7 @@ void Customer::setCustomerID(const string& customerID) {
 }
 
 // chuyển đối tượng thành chuỗi
-const string Customer::toString() const {
+string Customer::toString() const {
     return to_string(m_iNumber) + "|" + m_strFullName + "|" + m_strID;
 }
 

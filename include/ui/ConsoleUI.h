@@ -4,9 +4,15 @@
 
 #ifndef AIRPLANEMANAGER_CONSOLEUI_H
 #define AIRPLANEMANAGER_CONSOLEUI_H
+#include "MenuController.h"
 
 
 class ConsoleUI {
+    MenuController* m_controller;
+public:
+    ConsoleUI();
+    ~ConsoleUI();
+    void exec();
 };
 
 

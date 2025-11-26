@@ -5,12 +5,12 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <vector>
+#include "../datastructures/List.hpp"
 using namespace std;
 
 class CustomerRepository {
 private:
-    vector<Customer*> m_customers;
+    List<Customer*> m_customers;
     const string PATH = "../data/customer.txt";
 
 public:
@@ -19,10 +19,12 @@ public:
     
     void add(const Customer&);
     void remove(const string&);
-    
-    vector<Customer*>::iterator findByID(const string&);
-    vector<Customer*>& getAll();
-    vector<Customer*>::iterator undefineCustomer();
+
+    Customer **findByID(const string &);
+
+    List<Customer *> &getAll();
+
+    Customer **undefineCustomer();
     
     void loadAllCustomers();
     void saveAllCustomers() const;
