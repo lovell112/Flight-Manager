@@ -9,7 +9,7 @@
 #include "include/ui/MenuController.h"
 
 int main() {
-    ConsoleUI* consoleApp = new ConsoleUI();
+    const auto* consoleApp = new ConsoleUI();
     consoleApp->exec();
     delete consoleApp;
     return 0;

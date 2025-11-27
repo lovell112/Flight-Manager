@@ -12,7 +12,7 @@ class ConsoleUI {
 public:
     ConsoleUI();
     ~ConsoleUI();
-    void exec();
+    void exec() const;
 };
 
 

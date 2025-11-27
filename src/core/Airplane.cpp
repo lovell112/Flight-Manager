@@ -88,8 +88,6 @@ bool Airplane::isSeatAvailable(const int seatNumber) const {
     return !m_seatList[seatNumber-1];
 }
 
-
-
 void Airplane::printAirplaneInfo() const {
     cout << toString() << endl;
 }

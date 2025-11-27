@@ -1,7 +1,3 @@
-//
-// Created by HP on 05/11/2025.
-//
-
 #include "../../include/ui/ConsoleUI.h"
 
 ConsoleUI::ConsoleUI() {
@@ -12,7 +8,6 @@ ConsoleUI::~ConsoleUI() {
     delete m_controller;
 }
 
-
-void ConsoleUI::exec() {
+void ConsoleUI::exec() const {
     m_controller->run();
 }

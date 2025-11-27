@@ -25,7 +25,7 @@ void MenuController::mainMenu() {
     system("cls");
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
     cout << string(20, ' ') << "*****************************************\n";
-    cout << string(20, ' ') << "*             SAN BAY QUOC TE           *\n";
+    cout << string(20, ' ') << "*             SAN BAY NOI DIA           *\n";
     cout << string(20, ' ') << "*****************************************\n";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 
@@ -49,19 +49,21 @@ void MenuController::flightListMenu() const {
     system("cls");
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
     cout << string(20, ' ') << "*****************************************\n";
-    cout << string(20, ' ') << "*             SAN BAY QUOC TE           *\n";
+    cout << string(20, ' ') << "*             SAN BAY NOI DIA           *\n";
     cout << string(20, ' ') << "*          (xem cac chuyen bay)         *\n";
     cout << string(20, ' ') << "*****************************************\n\n";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 
-    cout<< left
+    cout << string(29, ' ') << "DANH SACH CAC CHUYEN BAY\n\n";
+    cout<< string(5, ' ') << string(flightIDWidth + departureWidth + destWidth + statusWidth + ticketWidth, '-') << endl;
+    cout<< string(5, ' ') << left
         << setw(flightIDWidth) << "Flight ID"
         << setw(departureWidth) << "Departure date"
         << setw(destWidth) << "Destination"
         << setw(statusWidth) << "Status"
         << setw(ticketWidth) << "Ticket "
         << endl;
-    cout<< string(flightIDWidth + departureWidth + destWidth + statusWidth + ticketWidth, '-') << endl;
+    cout<< string(5, ' ') << string(flightIDWidth + departureWidth + destWidth + statusWidth + ticketWidth, '-') << endl;
 
     for (const auto& flight : m_flightManager->getAllFlight()) {
         string status;
@@ -79,7 +81,7 @@ void MenuController::flightListMenu() const {
                 status = "Hoan tat";
                 break;
         }
-        cout<< left
+        cout << string(5, ' ') << left
         << setw(flightIDWidth) << flight->getFlightID()
         << setw(departureWidth) << flight->getDepartureDate().toString()
         << setw(destWidth) << flight->getDestinationAirport()
@@ -97,19 +99,19 @@ void MenuController::flightListMenu() const {
         }
         cout << endl;
     }
-    cout << "(Enter)";
-    cin.ignore();
-    cin.get();
+    cout<< string(5, ' ') << string(flightIDWidth + departureWidth + destWidth + statusWidth + ticketWidth, '-') << endl;
 }
 
 void MenuController::bookTicketMenu() const {
     system("cls");
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
     cout << string(20, ' ') << "*****************************************\n";
-    cout << string(20, ' ') << "*             SAN BAY QUOC TE           *\n";
+    cout << string(20, ' ') << "*             SAN BAY NOI DIA           *\n";
     cout << string(20, ' ') << "*                (dat ve)               *\n";
     cout << string(20, ' ') << "*****************************************\n";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+
+    flightListMenu();
 
     cout << string(20, ' ') << "Vui long dien day du cac thong tin sau:\n";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
@@ -166,7 +168,7 @@ void MenuController::bookTicketMenu() const {
 }
 
 void MenuController::manageMenu() const {
-    int option = 0;
+    int option = -1;
 
     do {
         system("cls");
@@ -227,18 +229,18 @@ void MenuController::showAllTicketQueue() const {
     cout << string(20, ' ') << "*****************************************\n\n";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 
-    cout<< string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
-    cout << left
+    cout << string(5, ' ') << string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
+    cout << string(5, ' ') << left
         << setw(ticketIDWidth) << "Ma ve"
         << setw(flightIDWidth) << "Ma chuyen bay"
         << setw(customerIDWidth) << "Ma khach hang"
         << setw(customerNameWidth) << "Ten khach hang"
         << setw(seatNumberWidth) << "So ghe"
         << endl;
-    cout<< string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
+    cout<< string(5, ' ') << string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
 
     if (m_ticketManager->getTicketQueueRepository().getList().empty()) {
-        cout << left
+        cout << string(5, ' ') << left
         << setw(ticketIDWidth) << "<none>"
         << setw(flightIDWidth) << "<none>"
         << setw(customerIDWidth) << "<none>"
@@ -247,7 +249,7 @@ void MenuController::showAllTicketQueue() const {
         << endl;
     } else {
         for (const auto& ticket : m_ticketManager->getTicketQueueRepository().getList()) {
-            cout << left
+            cout << string(5, ' ') << left
             << setw(ticketIDWidth) << ticket->getTicketID()
             << setw(flightIDWidth) << ticket->getFlightID()
             << setw(customerIDWidth) << ticket->getCustomerID()
@@ -256,7 +258,7 @@ void MenuController::showAllTicketQueue() const {
             << endl;
         }
     }
-    cout<< string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
+    cout<< string(5, ' ') << string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
     cout << endl;
 }
 
@@ -271,18 +273,18 @@ void MenuController::showAllTicket() const {
     cout << string(20, ' ') << "*****************************************\n\n";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 
-    cout<< string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
-    cout << left
+    cout<< string(5, ' ') << string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
+    cout << string(5, ' ') << left
         << setw(ticketIDWidth) << "Ma ve"
         << setw(flightIDWidth) << "Ma chuyen bay"
         << setw(customerIDWidth) << "Ma khach hang"
         << setw(customerNameWidth) << "Ten khach hang"
         << setw(seatNumberWidth) << "So ghe"
         << endl;
-    cout<< string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
+    cout<< string(5, ' ') << string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
 
     if (m_ticketManager->getTicketRepository().getAll().empty()) {
-        cout << left
+        cout << string(5, ' ') << left
         << setw(ticketIDWidth) << "<none>"
         << setw(flightIDWidth) << "<none>"
         << setw(customerIDWidth) << "<none>"
@@ -291,7 +293,7 @@ void MenuController::showAllTicket() const {
         << endl;
     } else {
         for (const auto& ticket : m_ticketManager->getTicketRepository().getAll()) {
-            cout << left
+            cout << string(5, ' ') << left
             << setw(ticketIDWidth) << ticket->getTicketID()
             << setw(flightIDWidth) << ticket->getFlightID()
             << setw(customerIDWidth) << ticket->getCustomerID()
@@ -300,7 +302,7 @@ void MenuController::showAllTicket() const {
             << endl;
         }
     }
-    cout<< string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
+    cout<< string(5, ' ') << string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
     cout << endl;
 }
 
@@ -335,19 +337,19 @@ void MenuController::showTicketByFlightID(const string& flightID) const {
 
     const int ticketIDWidth = 10, flightIDWidth = 20, customerIDWidth = 20, customerNameWidth = 20, seatNumberWidth = 10;
 
-    cout << setw(40) << "VE BAY THEO MA CHUYEN BAY: " << flightID << endl;
-    cout<< string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
-    cout << left
+    cout << string(25, ' ') << "VE BAY THEO MA CHUYEN BAY: " << flightID << endl;
+    cout<< string(5, ' ') << string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
+    cout << string(5, ' ') << left
         << setw(ticketIDWidth) << "Ma ve"
         << setw(flightIDWidth) << "Ma chuyen bay"
         << setw(customerIDWidth) << "Ma khach hang"
         << setw(customerNameWidth) << "Ten khach hang"
         << setw(seatNumberWidth) << "So ghe"
         << endl;
-    cout<< string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
+    cout<< string(5, ' ') << string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
 
     for (auto& ticket : tickets) {
-        cout << left
+        cout << string(5, ' ') << left
         << setw(ticketIDWidth) << ticket->getTicketID()
         << setw(flightIDWidth) << ticket->getFlightID()
         << setw(customerIDWidth) << ticket->getCustomerID()
@@ -355,10 +357,9 @@ void MenuController::showTicketByFlightID(const string& flightID) const {
         << setw(seatNumberWidth) << ticket->getSeatNumber()
         << endl;
     }
-    cout<< string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
-    cout << endl;
-    cin.ignore();
+    cout<< string(5, ' ') << string(ticketIDWidth + flightIDWidth + customerIDWidth + customerNameWidth + seatNumberWidth, '-') << endl;
     cout << "(Enter)";
+    cin.ignore();
     cin.get();
 }
 
@@ -374,6 +375,16 @@ void MenuController::showAvailableSeatOfFlight(const string &flightID) const {
     const auto flight = m_flightManager->findFlightByID(flightID);
     if (flight == m_flightManager->getFlightRepository().undefineFlight()) {
         cout << string(20, ' ') << "Khong ton tai chuyen bay co ID: " << flightID << endl;
+        cout << string(20, ' ') << "(Enter)";
+        cin.ignore();
+        cin.get();
+        return;
+    }
+
+    if ((*flight)->getStatus() == FlightStatus::COMPLETED) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+        cout << string(20, ' ') << "CHUYEN BAY DA HOAN TAT!\n";
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
         cout << string(20, ' ') << "(Enter)";
         cin.ignore();
         cin.get();
@@ -412,7 +423,7 @@ void MenuController::showFlightQuantityOfAirplane(const string &airplaneID) cons
     const auto airplane = m_flightManager->getAirplaneRepository().findByID(airplaneID);
     if (airplane == m_flightManager->getAirplaneRepository().undefineAirplane()) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
-        cout << "Khong ton tai may bay " << airplaneID << "!" << endl;
+        cout << string(20, ' ') << "Khong ton tai may bay " << airplaneID << "!" << endl;
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
         cout << string(20, ' ') << "(Enter)";
         cin.ignore();
@@ -434,15 +445,15 @@ void MenuController::showFlightQuantityOfAirplane(const string &airplaneID) cons
     const int ticketWidth = 20;
 
     cout << string(20, ' ') << "CAC CHUYEN BAY CUA MAY BAY " << airplaneID << endl;
-    cout<< string(flightIDWidth + departureWidth + destWidth + statusWidth + ticketWidth, '-') << endl;
-    cout<< left
+    cout<< string(5, ' ') << string(flightIDWidth + departureWidth + destWidth + statusWidth + ticketWidth, '-') << endl;
+    cout<< string(5, ' ') << left
         << setw(flightIDWidth) << "Flight ID"
         << setw(departureWidth) << "Departure date"
         << setw(destWidth) << "Destination"
         << setw(statusWidth) << "Status"
         << setw(ticketWidth) << "Ticket "
         << endl;
-    cout<< string(flightIDWidth + departureWidth + destWidth + statusWidth + ticketWidth, '-') << endl;
+    cout<< string(5, ' ') << string(flightIDWidth + departureWidth + destWidth + statusWidth + ticketWidth, '-') << endl;
 
     for (const auto flight : flights) {
         string status;
@@ -460,7 +471,7 @@ void MenuController::showFlightQuantityOfAirplane(const string &airplaneID) cons
                 status = "Hoan tat";
                 break;
         }
-        cout<< left
+        cout<< string(5, ' ') << left
         << setw(flightIDWidth) << flight->getFlightID()
         << setw(departureWidth) << flight->getDepartureDate().toString()
         << setw(destWidth) << flight->getDestinationAirport()
@@ -478,13 +489,14 @@ void MenuController::showFlightQuantityOfAirplane(const string &airplaneID) cons
         }
         cout << endl;
     }
+    cout<< string(5, ' ') << string(flightIDWidth + departureWidth + destWidth + statusWidth + ticketWidth, '-') << endl;
     cout << "(Enter)";
     cin.ignore();
     cin.get();
 }
 
 void MenuController::handleTicketBooking() const {
-    int option = 0;
+    int option = -1;
     do {
         showAllTicketQueue();
 
@@ -567,7 +579,7 @@ void MenuController::handleTicketBooking() const {
 
 void MenuController::handleTicketCancelation() const {
 
-    int option = 0;
+    int option = -1;
 
     do {
         showAllTicket();
@@ -624,7 +636,7 @@ void MenuController::handleTicketCancelation() const {
 
 void MenuController::showStatistics() const {
 
-    int option = 0;
+    int option = -1;
     do {
         system("cls");
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 5);
@@ -814,7 +826,7 @@ void MenuController::showLogin() const {
 }
 
 void MenuController::run() const {
-    int option = 0;
+    int option = -1;
     do {
         mainMenu();
         auto o = input();
@@ -827,6 +839,9 @@ void MenuController::run() const {
             switch (option) {
                 case 1:
                     flightListMenu();
+                    cout << "(Enter)";
+                    cin.ignore();
+                    cin.get();
                     break;
                 case 2:
                     bookTicketMenu();
