@@ -7,6 +7,7 @@
 #include <windows.h>
 
 string MenuController::ESCAPE = "VK_ESCAPE";
+
 MenuController::MenuController() {
     m_customerService = new CustomerService();
     m_authService = new AuthService();
@@ -328,7 +329,9 @@ void MenuController::showTicketByFlightID(const string& flightID) const {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 
     if (tickets.empty()) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
         cout << string(20, ' ') << "Khong co ve nao cho chuyen bay: " << flightID << endl;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
         cout << string(20, ' ') << "(Enter)";
         cin.ignore();
         cin.get();
@@ -374,7 +377,9 @@ void MenuController::showAvailableSeatOfFlight(const string &flightID) const {
 
     const auto flight = m_flightManager->findFlightByID(flightID);
     if (flight == m_flightManager->getFlightRepository().undefineFlight()) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
         cout << string(20, ' ') << "Khong ton tai chuyen bay co ID: " << flightID << endl;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
         cout << string(20, ' ') << "(Enter)";
         cin.ignore();
         cin.get();
@@ -431,7 +436,9 @@ void MenuController::showFlightQuantityOfAirplane(const string &airplaneID) cons
         return;
     }
     if (flights.empty()) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
         cout << string(20, ' ') << "May bay " << airplaneID << " khong co chuyen bay nao\n";
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
         cout << string(20, ' ') << "(Enter)";
         cin.ignore();
         cin.get();
