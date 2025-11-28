@@ -14,14 +14,25 @@
 
 #include "../repository/CustomerRepository.h"
 #include <vector>
-
 #include "../repository/AirplaneRepository.h"
 #include "../repository/FlightRepository.h"
 #include "../repository/TicketQueueRepository.h"
 #include "../repository/TicketRepository.h"
+
+/**
+ * @class TicketRepository
+ * @brief Forward declaration - khai báo trước để tránh circular include
+ */
 class TicketRepository;
 using namespace std;
-
+/**
+ * @class CustomerService
+ * @brief Xây dựng mô hình service để quản lý dịch vụ khách hàng
+ * @details Cung cấp các method để thao tác với khách hàng
+ * @details Quản lý đặt vé, hủy vé, thông tin khách hàng
+ * @attention Phải khởi tạo tất cả repositories trước khi sử dụng
+ * @attention Các method là const, không thay đổi state
+ */
 class CustomerService {
 private:
     TicketRepository* m_ticketRepository;
