@@ -1,6 +1,7 @@
-//
-// Created by HP on 05/11/2025.
-//
+/******************************************************************************
+ * @file Flight.cpp
+ * @description Triển khai các method của Flight
+ ******************************************************************************/
 
 #include "../../include/core/Flight.h"
 #include <algorithm> // cho std::remove
