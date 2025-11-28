@@ -1,3 +1,8 @@
+/**
+ * @file MenuController.cpp
+ * @description Triển khai các method của MenuController
+ */
+
 #include "../../include/ui/MenuController.h"
 #include <iomanip>
 #include <conio.h>

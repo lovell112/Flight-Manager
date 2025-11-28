@@ -1,3 +1,8 @@
+/**
+ * @file ConsoleUI.cpp
+ * @brief Triển khai các method của ConsoleUI
+ */
+
 #include "../../include/ui/ConsoleUI.h"
 
 ConsoleUI::ConsoleUI() {

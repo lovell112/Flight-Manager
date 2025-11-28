@@ -5,12 +5,9 @@ AdminRepository::AdminRepository() {
 }
 
 AdminRepository::~AdminRepository() {
-    loadAllAdmins(); // cap nhat du lieu moi nhat
 
-    // Luu lai cac tai khoan admin truoc khi delete
+    loadAllAdmins();
     saveAllAdmins();
-
-    // Delete tat ca admin tranh bi leak memory
     for (const auto& admin : m_admins) {
         delete admin;
     }
@@ -19,10 +16,8 @@ AdminRepository::~AdminRepository() {
 }
 
 void AdminRepository::loadAllAdmins() {
-
     ifstream reader(PATH);
 
-    // Kiem tra co doc duoc file khong?
     if (!reader.is_open()) {
         cerr << "Khong doc duoc file\n";
         return;
@@ -49,13 +44,11 @@ void AdminRepository::loadAllAdmins() {
 void AdminRepository::saveAllAdmins() const {
     ofstream writer(PATH);
 
-    // Kiem tra co doc duoc file khong?
     if (!writer.is_open()) {
         cerr << "Khong viet duoc file";
         return;
     }
 
-    // Ghi du lieu admin ra file theo dinh dang: username|password
     for (const auto& admin : m_admins) {
         writer << admin->toString() << endl;
     }
@@ -71,11 +64,6 @@ Admin** AdminRepository::getValidateAdmin(const string &username, const string &
     }
 
     return undefineAdmin();
-}
-
-Admin** AdminRepository::begin() {
-    loadAllAdmins();
-    return m_admins.begin();
 }
 
 Admin** AdminRepository::undefineAdmin() {

@@ -1,3 +1,9 @@
+/**
+* @file AuthService.cpp
+ * @brief Triển khai class AuthService
+ * @details
+ */
+
 #include "../../include/service/AuthService.h"
 
 AuthService::AuthService() {
@@ -29,11 +35,7 @@ bool AuthService::tryChangePassword(const string &oldPassword, const string &new
     if (m_currentAdmin == m_adminRepository->undefineAdmin())
         return false;
 
-    // Neu mat khau cu khong dung thi khong the doi mat khau
-    if (!(*m_currentAdmin)->tryChangePassword(oldPassword, newPassword))
-        return false;
-
-    return true;
+    return (*m_currentAdmin)->tryChangePassword(oldPassword, newPassword);
 }
 
 void AuthService::logout() {

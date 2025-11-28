@@ -1,8 +1,13 @@
+/******************************************************************************
+ * @file Admin.cpp
+ * @description Triển khai các method của Admin
+ ******************************************************************************/
+
 #include "../../include/core/Admin.h"
 
 Admin::Admin(const string& username, const string& password) : m_strUsername(username), m_strPassword(password) {}
 
-Admin::~Admin() {}
+Admin::~Admin() = default;
 
 bool Admin::tryLogin(const string &username, const string &password) const {
     if (username == m_strUsername && password == m_strPassword)
@@ -10,7 +15,6 @@ bool Admin::tryLogin(const string &username, const string &password) const {
     return false;
 }
 
-// Neu thoa man cac dieu kien thi doi mat khau, return true; nguoc lai khong doi, return false
 bool Admin::tryChangePassword(const string &oldPassword, const string &newPassword) {
     if (oldPassword != m_strPassword || oldPassword == newPassword)
         return false;
