@@ -56,7 +56,7 @@ public:
      * @description Thêm khách hàng mới vào hệ thống
      * @param const Customer& Tham chiếu đến đối tượng khách hàng cần thêm
      * @attention Kiểm tra trùng lặp trước khi thêm
-     * @attention Trả về ERROR_INVALID_PARAM nếu dữ liệu không hợp lệ
+     * @attention Kiểm tra dữ liệu hợp lệ trước khi thêm
      */
     void addCustomer(const Customer&) const;
     /**
@@ -68,13 +68,16 @@ public:
     void removeCustomer(const string&) const;
      /**
      * @description Thực hiện đặt vé cho khách hàng
-     * @param const string& ID của khách hàng
      * @param const string& ID của chuyến bay
-     * @param const string& Điểm đi hoặc điểm đến
-     * @param int Số lượng vé cần đặt
+     * @param const string& ID của khách hàng
+     * @param const string& Họ tên khách hàng
+     * @param int Số ghế cần đặt
      * @return true nếu đặt vé thành công, false nếu thất bại
-     * @attention Kiểm tra sức chứa máy bay trước khi đặt
-     * @attention Trả về NULL nếu có lỗi ERROR_INVALID_PARAM
+     * @attention Kiểm tra ID khách hàng hợp lệ (12 chữ số)
+     * @attention Kiểm tra tên khách hàng không được rỗng
+     * @attention Kiểm tra chuyến bay tồn tại và còn ghế trống
+     * @attention Kiểm tra ghế chưa được đặt
+     * @attention Tạo vé mới và thêm vào hàng đợi
      */
     bool tryBookTicket(const string&, const string&, const string&, int) const;
     /**
@@ -93,7 +96,7 @@ public:
     /**
      * @description Khôi phục khách hàng (tính năng dự bị)
      * @return Con trỏ đến mảng khách hàng chưa xác định
-     * @attention Chỉ dùng trong trường hợp đặc biệt
+     * @attention Chỉ dùng trong trường hợp khôi phục dữ liệu đặc biệt
      */
     Customer **undefineCustomer() const;
 };
