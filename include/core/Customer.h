@@ -16,6 +16,17 @@
 #include <string>
 using namespace std;
 
+/**
+ * ************************************************************
+ * @class Customer
+ * @description Lớp đại diện cho một khách hàng trong hệ thống
+ *              Lưu trữ thông tin cơ bản: số thứ tự, họ tên, ID
+ *              Cung cấp các phương thức getter/setter và in thông tin
+ *
+ * @attention Sử dụng [[nodiscard]] để cảnh báo nếu bỏ qua giá trị trả về
+ * @attention Destructor mặc định vì không cấp phát bộ nhớ động
+ * ************************************************************
+ */
 class Customer {
 private:
     int m_iNumber;
