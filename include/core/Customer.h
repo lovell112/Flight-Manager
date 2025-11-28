@@ -27,17 +27,17 @@ private:
 
 public:
     /**
-     * @description Constructor mặc định (không có tham số)
+     * @description Constructor mặc định
      *              Khởi tạo khách hàng với giá trị mặc định
-     *              Số thứ tự = 0, họ tên = "", ID = ""
+     *              m_iNumber = 0, m_strFullName = "", m_strID = ""
      */
     Customer();
 /**
      * @description Constructor có tham số
      *              Khởi tạo khách hàng với dữ liệu cụ thể
-     * @param int Số thứ tự của khách hàng
-     * @param const string& Tham chiếu tới chuỗi họ tên khách hàng
-     * @param const string& Tham chiếu tới chuỗi ID khách hàng
+     * @param number Số thứ tự của khách hàng
+     * @param fullName Họ tên đầy đủ của khách hàng
+     * @param id ID (CMND) của khách hàng
      */
     Customer(int, const string&, const string&);
     /**
@@ -78,7 +78,7 @@ public:
     void setFullname(const string&);
     /**
      * @description Đặt ID cho khách hàng
-     * @param const string& Tham chiếu tới chuỗi ID cần đặt
+     * @param customerID ID (CMND) cần đặt
      * @attention Không kiểm tra ID hợp lệ, gọi hàm validation khác nếu cần
      * @attention ID nên là duy nhất trong hệ thống
      */
@@ -96,6 +96,7 @@ public:
      *              Hiển thị: Số thứ tự, Họ tên, ID
      * @attention Sử dụng cout để in ra màn hình
      * @attention Hữu ích cho debug và kiểm tra dữ liệu
+     * @attention Gọi toString() để lấy chuỗi rồi in
      */
     void printCustomerInfo() const;
 };
