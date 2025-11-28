@@ -21,6 +21,14 @@
 #include "../datastructures/List.hpp"
 using namespace std;
 
+/**
+ * @class CustomerRepository
+ * @brief Hứng data được lưu trữ trong file customer.txt
+ * @details Lưu trữ data vào List<Customer*>
+ * @details Cung cấp các method để thao tác với dữ liệu
+ * @attention Phải gọi loadAllCustomers() sau khởi tạo để tải dữ liệu
+ * @attention Gọi saveAllCustomers() để lưu thay đổi vào file
+ */
 class CustomerRepository {
 private:
     List<Customer*> m_customers;
