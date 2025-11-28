@@ -111,14 +111,14 @@ List<Ticket *> TicketManager::findByDestination(const string &destination) const
 
     return result;
 }
-
+// tìm mã chuyến bay
 List<Ticket *> TicketManager::findByFlightID(const string &flightID) const {
     return m_ticketRepository->findByFlightID(flightID);
 }
 
 
 TicketRepository &TicketManager::getTicketRepository() const {
-    loadData();
+    loadData(); // load ticket
     return *m_ticketRepository;
 }
 
