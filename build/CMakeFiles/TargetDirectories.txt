@@ -1,0 +1,3 @@
+C:/2025-2026_HK1/Cau_truc_du_lieu/Bai_Nhom/Flight-Manager/build/CMakeFiles/FlightManager.dir
+C:/2025-2026_HK1/Cau_truc_du_lieu/Bai_Nhom/Flight-Manager/build/CMakeFiles/edit_cache.dir
+C:/2025-2026_HK1/Cau_truc_du_lieu/Bai_Nhom/Flight-Manager/build/CMakeFiles/rebuild_cache.dir

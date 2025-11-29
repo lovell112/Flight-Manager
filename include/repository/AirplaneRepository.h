@@ -10,31 +10,70 @@
 #include <iostream>
 using namespace std;
 
+/**********************************************************
+ * @Class       AirplaneRepository
+ * @Description Quản lý danh sách máy bay: thêm, xóa, tìm,
+ *              lưu file và tải dữ liệu từ file airplane.txt.
+ **********************************************************/
 class AirplaneRepository {
-    List<Airplane*> m_airplanes;
-    const string PATH = "../data/airplane.txt";
+    List<Airplane*> m_airplanes; // Danh sách máy bay quản lý
+    const string PATH = "../data/airplane.txt"; // Đường dẫn file dữ liệu
 public:
+    /**********************************************************
+     * @Description Constructor - load dữ liệu máy bay
+     **********************************************************/
     AirplaneRepository();
+
+    /**********************************************************
+     * @Description Destructor - giải phóng toàn bộ object
+     **********************************************************/
     ~AirplaneRepository();
 
-    //CRUD
+    // ================== CRUD ==================
+
+    /**********************************************************
+     * @Description Thêm máy bay mới
+     **********************************************************/
     void add(const Airplane&);
+
+    /**********************************************************
+     * @Description Xóa máy bay theo ID
+     **********************************************************/
     void remove(const string&);
 
-    // Tìm máy bay theo ID, trả Iterator
+    /**********************************************************
+     * @Description Tìm máy bay theo ID
+     * @return      Pointer đến pointer Airplane (Iterator kiểu thô)
+     **********************************************************/
     Airplane** findByID(const string&);
 
-    // Lấy danh sách trạng thái ghế (0 = trống, 1 = đặt)
+    /**********************************************************
+     * @Description Lấy danh sách trạng thái ghế của máy bay
+     * @return      List<int> (0 = trống, 1 = đặt)
+     **********************************************************/
     List<int> getSeatList(const string&);
 
-    // // Truy cập toàn bộ danh sách
+    /**********************************************************
+     * @return Danh sách toàn bộ máy bay (tham chiếu)
+     **********************************************************/
     List<Airplane*>& getAll();
 
-    // undefine object
+    /**********************************************************
+     * @Description Trả về Airplane** không xác định (rỗng)
+     * @attention   Dùng khi không tìm thấy máy bay
+     **********************************************************/
     [[nodiscard]] Airplane** undefineAirplane();
 
-    // Load / Save dữ liệu
+    // ================== File I/O ==================
+
+    /**********************************************************
+     * @Description Load toàn bộ máy bay từ file
+     **********************************************************/
     void loadAllAirplanes();
+
+   /**********************************************************
+    * @Description Lưu toàn bộ máy bay ra file
+    **********************************************************/
     void saveAllAirplanes() const;
 };
 

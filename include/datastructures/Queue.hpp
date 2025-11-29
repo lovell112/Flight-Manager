@@ -7,6 +7,10 @@
 template <typename T>
 class Queue;
 
+/**********************************************************
+ * @Struct      Node
+ * @Description Node của Queue: gồm dữ liệu và con trỏ next.
+ **********************************************************/
 template <typename T>
 class Node {
     T m_data;          // du lieu cua node
@@ -20,6 +24,11 @@ public:
     ~Node() {}
 };
 
+/**********************************************************
+ * @Class       Queue
+ * @Description Hàng đợi kiểu liên kết đơn template.
+ *              Hỗ trợ push, pop, front, back, clear.
+ **********************************************************/
 template <typename T>
 class Queue {
     Node<T>* m_front;  // phan tu dau hang doi
@@ -27,51 +36,69 @@ class Queue {
     size_t m_size;     // so luong phan tu hien co
 
 public:
+    /**********************************************************
+     * @Description Constructor mặc định
+     **********************************************************/
     Queue() : m_front(nullptr), m_back(nullptr), m_size(0) {}
 
-    // Copy constructor
-Queue(const Queue& other) : m_front(nullptr), m_back(nullptr), m_size(0) {
-    Node<T>* cur = other.m_front;
-    while (cur) {
-        push(cur->m_data);
-        cur = cur->m_next;
+    /**********************************************************
+     * @Description Copy constructor – deep copy
+     **********************************************************/
+    Queue(const Queue& other) : m_front(nullptr), m_back(nullptr), m_size(0) {
+        Node<T>* cur = other.m_front;
+        while (cur) {
+            push(cur->m_data);
+            cur = cur->m_next;
+        }
     }
-}
 
-  // Operator=
-Queue& operator=(const Queue& other) {
-    if (this == &other)
+    /**********************************************************
+       * @Description Operator= – deep copy, tránh self-assign
+       **********************************************************/
+    Queue& operator=(const Queue& other) {
+        if (this == &other)
+            return *this;
+
+        clear();
+
+        Node<T>* cur = other.m_front;
+        while (cur) {
+            push(cur->m_data);
+            cur = cur->m_next;
+        }
+
         return *this;
-
-    clear();
-
-    Node<T>* cur = other.m_front;
-    while (cur) {
-        push(cur->m_data);
-        cur = cur->m_next;
     }
 
-    return *this;
-}
-
-    // giai phong toan bo node khi huy Queue
+    /**********************************************************
+     * @Description Destructor – giải phóng toàn bộ node
+     **********************************************************/
     ~Queue() {
         clear();
     }
 
-    // tra ve phan tu o dau Queue
+    // ================== Core Operations ==================
+
+    /**********************************************************
+     * @return Dữ liệu phần tử đầu hàng đợi
+     * @attention Ném exception nếu queue rỗng
+     **********************************************************/
     T& front() const {
         if (!m_front) throw std::out_of_range("Queue is empty");
         return m_front->m_data;
     }
 
-    // tra ve phan tu o cuoi Queue
+    /**********************************************************
+     * @return Dữ liệu phần tử cuối queue
+     **********************************************************/
     T& back() const {
         if (!m_back) throw std::out_of_range("Queue is empty");
         return m_back->m_data;
     }
 
-    // them phan tu vao cuoi Queue
+    /**********************************************************
+     * @Description Thêm phần tử vào cuối queue
+     **********************************************************/
     void push(const T &item) {
         auto* newNode = new Node<T>(item);
 
@@ -88,7 +115,10 @@ Queue& operator=(const Queue& other) {
         m_size++;
     }
 
-    // xoa phan tu o dau Queue
+    /**********************************************************
+     * @Description Xóa phần tử đầu queue
+     * @attention   Ném exception nếu queue rỗng
+     **********************************************************/
     void pop() {
         if (!m_front) throw std::out_of_range("Queue is empty");
 
@@ -103,17 +133,23 @@ Queue& operator=(const Queue& other) {
         m_size--;
     }
 
-    // kiem tra Queue co rong hay khong
+    /**********************************************************
+     * @return true nếu queue rỗng
+     **********************************************************/
     [[nodiscard]] bool empty() const {
         return m_size == 0;
     }
 
-    // lay so luong phan tu
+    /**********************************************************
+     * @return Số lượng phần tử trong queue
+     **********************************************************/
     [[nodiscard]] size_t size() const {
         return m_size;
     }
 
-    // xoa tat ca phan tu trong Queue
+    /**********************************************************
+     * @Description Xóa toàn bộ phần tử trong queue
+     **********************************************************/
     void clear() {
         while (m_front) {
             const Node<T>* temp = m_front;
