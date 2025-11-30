@@ -35,7 +35,7 @@ void CustomerService::removeCustomer(const string& customerID) const {
 
 bool CustomerService::tryBookTicket(const string& flightID, const string& customerID, const string& customerFullname, int seatNumber) const {
 
-    function<bool (const string&)> isValidID = [](const string& id) ->bool  {
+    const function isValidID = [](const string& id) ->bool  {
         if (id.size() != 12)
             return false;
         for (const auto ch : id) {

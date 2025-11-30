@@ -77,7 +77,7 @@ public:
      * @return boolean value: true nếu thêm thành công
      * @attention False nếu không có vé trong queue hoặc dữ liệu không hợp lệ
      ************************************************************************/
-    [[nodiscard]] bool addTicketFromQueue() const;
+    void addTicketFromQueue() const;
 
     /************************************************************************
      * @brief Xoá vé đầu tiên trong TicketQueue

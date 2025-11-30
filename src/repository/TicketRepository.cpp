@@ -8,7 +8,6 @@ TicketRepository::TicketRepository() {
 }
 
 TicketRepository::~TicketRepository() {
-    loadAllTickets(); // cap nhat du lieu moi nhat
     saveAllTickets();  // auto save truoc khi huy
 
     //delete tat ca tickets
@@ -19,7 +18,6 @@ TicketRepository::~TicketRepository() {
 }
     // them ve vao danh sach
 void TicketRepository::add(const Ticket& ticket) {
-    loadAllTickets();
     m_tickets.add(new Ticket(ticket));
     saveAllTickets();
     loadAllTickets();

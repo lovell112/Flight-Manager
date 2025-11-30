@@ -1,4 +1,8 @@
 #include "../../include/service/TicketManager.h"
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
+#define _HAS_STD_BYTE 0
+#include <windows.h>
 
 void TicketManager::saveData() const {
     m_ticketRepository->saveAllTickets();
@@ -32,11 +36,14 @@ TicketManager::~TicketManager() {
     delete m_customerRepository;
 }
 
-bool TicketManager::addTicketFromQueue() const {
+void TicketManager::addTicketFromQueue() const {
     auto ticket = *m_ticketQueueRepository->front();
     if (m_ticketRepository->contains(&ticket)) {
         m_ticketQueueRepository->pop(); // delete ve khoi hang doi
-        return false;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+        cout << string(20, ' ') << "Ve : " << ticket.getTicketID() << " da ton tai!\n";
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+        return ;
     }
     m_ticketRepository->add(ticket);
 
@@ -50,7 +57,10 @@ bool TicketManager::addTicketFromQueue() const {
 
     saveData();
     loadData();
-    return true;
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+    cout << string(20, ' ') << "Da chap nhan ve : " << ticket.getTicketID() << endl;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 }
 
 void TicketManager::removeTicketQueue() const {

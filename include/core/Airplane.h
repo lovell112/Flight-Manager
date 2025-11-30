@@ -7,8 +7,9 @@ using namespace std;
 
 /**********************************************************
  * @Class       Airplane
- * @Description Đại diện 1 máy bay: ID, số ghế, số ghế trống
+ * @brief Đại diện 1 máy bay: ID, số ghế, số ghế trống
  *              và danh sách trạng thái ghế.
+ * @details
  **********************************************************/
 class Airplane {
     string m_strID;

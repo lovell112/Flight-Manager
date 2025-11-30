@@ -552,16 +552,7 @@ void MenuController::handleTicketBooking() const {
                     cout << string(20, ' ') << "Chua co ve nao duoc dat!\n";
                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
                 } else {
-                    const string ticketID = ticket->getTicketID();
-                    if (m_ticketManager->addTicketFromQueue()) {
-                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
-                        cout << string(20, ' ') << "Da chap nhan ve : " << ticketID << endl;
-                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-                    } else {
-                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
-                        cout << string(20, ' ') << "Ve : " << ticketID << " da ton tai!\n";
-                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-                    }
+                    m_ticketManager->addTicketFromQueue();
                 }
                 break;
             }
